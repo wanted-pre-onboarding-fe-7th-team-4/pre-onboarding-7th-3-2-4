@@ -1,15 +1,48 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import type { NextApiRequest, NextApiResponse } from "next";
+
+interface UserModel {
+  accessToken: string;
+  user: {
+    email: string;
+    id: number;
+  };
+}
 
 export default async function loginHandler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse<{ isLogin: boolean }>
 ) {
-  const {
-    query: { email }
-  } = req;
+  try {
+    const {
+      body: { email, password }
+    } = req;
 
-  const hi = axios.post("http://localhost:4000/login");
+    const response = await axios.post<UserModel>(
+      "http://localhost:4000/login",
+      {
+        email,
+        password
+      }
+    );
 
-  return res.status(200).json({ email });
+    const { accessToken } = response.data;
+
+    // const stringUser = JSON.stringify(user);
+
+    res.setHeader(
+      "Set-Cookie",
+      `accessToken=${accessToken}; path=/;  Max-Age=360; Secure; HttpOnly;`
+    );
+    // res.setHeader(
+    //   "Set-Cookie",
+    //   `user=${stringUser}; path=/;  Max-Age=360; Secure; HttpOnly;`
+    // );
+
+    return res.status(200).json({ isLogin: true });
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      return error;
+    }
+  }
 }
