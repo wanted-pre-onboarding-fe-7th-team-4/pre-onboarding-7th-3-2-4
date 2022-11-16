@@ -26,13 +26,18 @@ export default async function loginHandler(
       }
     );
 
-    const { accessToken, user } = response.data;
-    console.log(accessToken, user);
+    const { accessToken } = response.data;
+
+    // const stringUser = JSON.stringify(user);
 
     res.setHeader(
       "Set-Cookie",
-      `accessToken=${accessToken}; path=/;  Max-Age=360000; Secure; HttpOnly;`
+      `accessToken=${accessToken}; path=/;  Max-Age=360; Secure; HttpOnly;`
     );
+    // res.setHeader(
+    //   "Set-Cookie",
+    //   `user=${stringUser}; path=/;  Max-Age=360; Secure; HttpOnly;`
+    // );
 
     return res.status(200).json({ isLogin: true });
   } catch (error) {
