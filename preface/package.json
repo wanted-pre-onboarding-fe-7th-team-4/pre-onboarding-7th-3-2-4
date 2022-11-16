@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "prettier --cache --wirte ."
+    "format": "prettier --cache --write ."
   },
   "dependencies": {
     "@next/font": "^13.0.3",
