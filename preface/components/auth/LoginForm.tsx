@@ -3,6 +3,12 @@ import Button from "./Button";
 // import { useRouter } from "next/router";
 import Input from "./Input";
 import useLoginInput from "./hook/useLoginInput";
+import { AuthServiceImpl } from "service/AuthService";
+
+const authService = new AuthServiceImpl<{
+  email: string;
+  password: string;
+}>();
 
 const LoginForm = () => {
   //   const router = useRouter();
@@ -11,6 +17,7 @@ const LoginForm = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    authService.login({ email, password });
   };
   return (
     <form onSubmit={handleSubmit}>
