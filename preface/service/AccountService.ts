@@ -11,6 +11,7 @@ interface AccountService {
     config?: AxiosRequestConfig
   ): Promise<AxiosResponse<TData>>;
   updateAccount<TData, TVariable>(
+    id: number,
     body: TVariable,
     config?: AxiosRequestConfig
   ): Promise<AxiosResponse<TData>>;
@@ -45,12 +46,17 @@ export class AccountServiceImpl implements AccountService {
   }
 
   async updateAccount<TData, TVariable>(
+    id: number,
     body: TVariable,
     config?: AxiosRequestConfig
   ): Promise<AxiosResponse<TData>> {
-    const response = await this.api.put<TData, TVariable>("accounts", body, {
-      ...config
-    });
+    const response = await this.api.put<TData, TVariable>(
+      `accounts/${id}`,
+      body,
+      {
+        ...config
+      }
+    );
 
     return response;
   }

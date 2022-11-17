@@ -1,55 +1,97 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Brokers } from "lib/utils/account/changeToBrokerName";
 import { AccountStatus } from "lib/utils/account/getAccountStatus";
 import { useUpdateAccount } from "../../auth/hook/useUpdateAccount";
-import { DashboardModel, AccountModel } from "model/model";
+import {
+  AccountModel,
+  DashboardModel,
+  TAccountStatusKey,
+  TBrokersKey
+} from "model/model";
+import { useUpdateAccountDetail } from "components/accountDetail/hook/useAccountDetail";
+import { useRouter } from "next/router";
+import convertUTCTimeToCustomString from "lib/utils/account/convertUTCTimeToCustomString";
+import convertKRTimeToUTC from "lib/utils/account/convertKRTimeToUTC";
 
 interface IUpdateAccount {
   newAccountDetail: DashboardModel;
   setIsEdit: React.Dispatch<React.SetStateAction<boolean>>;
 }
-// TODO: Form validation
+
 const UpdateAccount = ({ newAccountDetail, setIsEdit }: IUpdateAccount) => {
-  const onUpdate = useUpdateAccount();
-  const [accountValue, setAccountValue] = useState<
-    Omit<AccountModel, "id" | "uuid">
-  >({
-    broker_id: "209",
-    status: 1,
-    assets: "",
-    payments: "",
-    is_active: true,
-    number: "",
-    name: "",
-    user_id: 123,
-    created_at: new Date(),
-    updated_at: new Date()
-  });
+  const { push } = useRouter();
+  const { mutate } = useUpdateAccountDetail();
 
-  // FIXME: 버튼 작동 고치기 VALIDATION
-  const disable =
-    accountValue.user_id === 0 ||
-    accountValue.name === "" ||
-    accountValue.number === "" ||
-    accountValue.assets === "" ||
-    accountValue.payments === "";
+  const [isDisable, setIsDisable] = useState(true);
+  const [userId, setUserId] = useState(newAccountDetail.user_id);
+  const [brokerId, setBrokerId] = useState(newAccountDetail.broker_id);
+  const [number, setNumber] = useState(newAccountDetail.number);
+  const [status, setStatus] = useState(newAccountDetail.status);
+  const [isActive, setIsActive] = useState(newAccountDetail.is_active);
+  const [name, setName] = useState(newAccountDetail.name);
+  const [assets, setAssets] = useState(newAccountDetail.assets);
+  const [payments, setPayments] = useState(newAccountDetail.payments);
 
-  console.log(disable, "disable");
-
-  const isDisable = disable
-    ? "bg-indigo-300"
-    : "bg-indigo-600 hover:bg-indigo-700";
-
-  const onChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    setAccountValue({ ...accountValue, [e.target.name]: e.target.value });
-  };
+  useEffect(() => {
+    if (
+      userId &&
+      brokerId &&
+      number &&
+      status &&
+      name &&
+      assets &&
+      payments &&
+      isActive !== undefined
+    ) {
+      setIsDisable(false);
+      return;
+    }
+    setIsDisable(true);
+  }, [userId, brokerId, number, status, name, assets, payments]);
 
   const onUpdateAccount = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    onUpdate(accountValue);
+    if (
+      userId &&
+      brokerId &&
+      number &&
+      status &&
+      name &&
+      assets &&
+      payments &&
+      isActive !== undefined &&
+      newAccountDetail.id &&
+      newAccountDetail.created_at &&
+      newAccountDetail.uuid
+    ) {
+      const created_at = convertKRTimeToUTC(newAccountDetail.created_at);
+      const updated_at = convertKRTimeToUTC(newAccountDetail.updated_at);
+      const obj: AccountModel = {
+        id: newAccountDetail.id,
+        uuid: newAccountDetail.uuid,
+        user_id: userId,
+        broker_id: brokerId,
+        number,
+        status,
+        is_active: isActive,
+        name,
+        assets: String(assets.replace(/,/g, "")),
+        payments: String(payments.replace(/,/g, "")),
+        created_at,
+        updated_at
+      };
+
+      mutate(
+        { id: Number(newAccountDetail.id), body: obj },
+        {
+          onSuccess: () => {
+            setIsEdit(false);
+            push(`/account/${newAccountDetail.id}`);
+          }
+        }
+      );
+    }
   };
 
   return (
@@ -65,33 +107,38 @@ const UpdateAccount = ({ newAccountDetail, setIsEdit }: IUpdateAccount) => {
                     name="user_id"
                     className=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-gray-100 text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
                     placeholder="고객명"
-                    onChange={onChange}
+                    value={userId}
+                    onChange={(e) => setUserId(Number(e.currentTarget.value))}
                   />
                 </div>
               </div>
               <div className="w-full">
-                <div className=" relative ">
+                <div className="relative">
                   <select
                     className="bg-gray-100 w-full py-2 px-4 items-center rounded-md outline-none"
                     name="broker_id"
-                    onChange={onChange}
+                    value={brokerId}
+                    onChange={(e) =>
+                      setBrokerId(e.currentTarget.value as TBrokersKey)
+                    }
                   >
-                    {Object.entries(Brokers).map((it) => (
-                      <option key={it[0]} value={it[0]}>
-                        {it[1]}
+                    {Object.entries(Brokers).map(([key, value]) => (
+                      <option key={key} value={key}>
+                        {value}
                       </option>
                     ))}
                   </select>
                 </div>
               </div>
               <div className="w-full">
-                <div className=" relative ">
+                <div className="relative">
                   <input
                     type="text"
                     name="number"
                     className=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-gray-100 text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
                     placeholder="계좌번호"
-                    onChange={onChange}
+                    value={number}
+                    onChange={(e) => setNumber(e.currentTarget.value)}
                   />
                 </div>
               </div>
@@ -100,11 +147,16 @@ const UpdateAccount = ({ newAccountDetail, setIsEdit }: IUpdateAccount) => {
                   <select
                     className="bg-gray-100 w-full py-2 px-4 items-center rounded-md outline-none"
                     name="status"
-                    onChange={onChange}
+                    value={status}
+                    onChange={(e) =>
+                      setStatus(
+                        Number(e.currentTarget.value) as TAccountStatusKey
+                      )
+                    }
                   >
-                    {Object.entries(AccountStatus).map((it) => (
-                      <option key={it[0]} value={it[0]}>
-                        {it[1]}
+                    {Object.entries(AccountStatus).map(([statusCode, name]) => (
+                      <option key={statusCode} value={statusCode}>
+                        {name}
                       </option>
                     ))}
                   </select>
@@ -113,7 +165,8 @@ const UpdateAccount = ({ newAccountDetail, setIsEdit }: IUpdateAccount) => {
               <select
                 className="bg-gray-100 w-full py-2 px-4 items-center rounded-md outline-none "
                 name="is_active"
-                onChange={onChange}
+                value={String(isActive)}
+                onChange={(e) => setIsActive(Boolean(e.currentTarget.value))}
               >
                 <option value="true">계좌 활성화</option>
                 <option value="false">계좌 비활성화</option>
@@ -124,7 +177,8 @@ const UpdateAccount = ({ newAccountDetail, setIsEdit }: IUpdateAccount) => {
                     name="name"
                     type="text"
                     className=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-gray-100 text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
-                    onChange={onChange}
+                    onChange={(e) => setName(e.currentTarget.value)}
+                    value={name}
                     placeholder="계좌명"
                   />
                 </div>
@@ -136,7 +190,8 @@ const UpdateAccount = ({ newAccountDetail, setIsEdit }: IUpdateAccount) => {
                     type="text"
                     className=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-gray-100 text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
                     placeholder="평가 금액"
-                    onChange={onChange}
+                    value={assets}
+                    onChange={(e) => setAssets(e.currentTarget.value)}
                   />
                 </div>
               </div>
@@ -147,16 +202,19 @@ const UpdateAccount = ({ newAccountDetail, setIsEdit }: IUpdateAccount) => {
                     type="text"
                     className=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-gray-100 text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
                     placeholder="입금 금액"
-                    onChange={onChange}
+                    value={payments}
+                    onChange={(e) => setPayments(e.currentTarget.value)}
                   />
                 </div>
               </div>
               <div className="flex gap-10">
                 <span className="block w-full rounded-md shadow-sm">
                   <button
-                    disabled={disable}
+                    disabled={isDisable}
                     type="submit"
-                    className={`cursor-pointer py-2 px-4 ${isDisable} focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg`}
+                    className={`cursor-pointer py-2 px-4 ${
+                      isDisable ? "bg-indigo-300" : "bg-indigo-600"
+                    } focus:ring-indigo-500  hover:bg-indigo-700 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg`}
                   >
                     계좌 수정
                   </button>
@@ -164,7 +222,7 @@ const UpdateAccount = ({ newAccountDetail, setIsEdit }: IUpdateAccount) => {
                 <span className="block w-full rounded-md shadow-sm">
                   <button
                     onClick={() => setIsEdit(false)}
-                    className={`cursor-pointer py-2 px-4 ${isDisable} focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg`}
+                    className="cursor-pointer py-2 px-4 bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg"
                   >
                     수정 취소
                   </button>

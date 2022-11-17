@@ -1,11 +1,13 @@
 import React, { useEffect } from "react";
+import { createPortal } from "react-dom";
 
 interface IProps {
-  closeModal(): void;
+  closeModal: () => void;
   children: React.ReactNode;
 }
 
 const Modal = (props: IProps) => {
+  const modalDiv = document.querySelector("#_modal");
   useEffect(() => {
     // modal이 떠 있을 땐 스크롤 막음
     document.body.style.cssText = `
@@ -26,23 +28,29 @@ const Modal = (props: IProps) => {
   };
 
   return (
-    <div
-      className="fixed top-0 left-0 w-full h-full flex justify-center items-center "
-      onClick={closeModal}
-    >
-      <div
-        className="absolute bg-white rounded-lg shadow sm:max-w-md sm:w-full sm:mx-auto sm:overflow-hidden p-4"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <button
-          className="absolute top-1 right-1 bg-transparent text-xl hover:cursor-pointer"
-          onClick={closeModal}
-        >
-          ✖
-        </button>
-        {props.children}
-      </div>
-    </div>
+    <>
+      {modalDiv &&
+        createPortal(
+          <div
+            className="fixed top-0 left-0 w-full h-full flex justify-center items-center "
+            onClick={closeModal}
+          >
+            <div
+              className="absolute bg-white rounded-lg shadow sm:max-w-md sm:w-full sm:mx-auto sm:overflow-hidden p-4"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                className="absolute top-1 right-1 bg-transparent text-xl hover:cursor-pointer"
+                onClick={closeModal}
+              >
+                ✖
+              </button>
+              {props.children}
+            </div>
+          </div>,
+          modalDiv
+        )}
+    </>
   );
 };
 
