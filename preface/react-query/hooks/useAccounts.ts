@@ -1,26 +1,27 @@
 import { useQuery } from "@tanstack/react-query";
 import { accountApi } from "lib/api/instance";
+import { PageAccountsQuery } from "lib/interfaces/queries";
 import { getFormattedAccountData } from "lib/utils/getFormattedAccountData";
-import { AccountModel, TAccountStatusKey, TBrokersKey } from "model/model";
+import { AccountModel } from "model/model";
 import { useRouter } from "next/router";
 import { queryKeys } from "react-query/constants";
 
 const LIMIT = 20;
 
-interface AccountsQuery {
-  broker_id?: TBrokersKey;
-  is_active?: boolean;
-  user_id?: number;
-  status?: TAccountStatusKey;
-  name?: string;
-  _page?: number;
-  q?: string;
-}
+// interface AccountsQuery {
+//   broker_id?: TBrokersKey;
+//   is_active?: boolean;
+//   user_id?: number;
+//   status?: TAccountStatusKey;
+//   name?: string;
+//   _page?: number;
+//   q?: string;
+// }
 
-export interface PageAccountsQuery extends AccountsQuery {
-  _page: number;
-  _limit: number;
-}
+// export interface PageAccountsQuery extends AccountsQuery {
+//   _page: number;
+//   _limit: number;
+// }
 
 export interface AccountResponseData {
   totalItems: number;

@@ -13,8 +13,7 @@ import { generateQueryString } from "lib/utils/generateQueryString";
 const AccountPage: NextPageWithLayout = () => {
   const { accounts, totalPage, refetch, limit, cur_page, query } =
     useAccounts();
-
-  const [page, setPage] = useState(cur_page || 1);
+  const [page, setPage] = useState<number>();
   const router = useRouter();
 
   const [showChild, setShowChild] = useState(false);
@@ -22,24 +21,25 @@ const AccountPage: NextPageWithLayout = () => {
     setShowChild(true);
   }, []);
 
+  useEffect(() => {
+    if (query._page !== undefined) setPage(Number(query._page));
+  }, [query._page]);
+
   if (!showChild) return null;
 
   if (typeof window === "undefined") return <></>;
 
   return (
     <Container className="w-full">
-      <AccountFilter />
+      <AccountFilter query={query} />
       <AccountListTable accountsData={accounts} />
       <Pagination
-        page={page}
+        page={page || 1}
         setPage={(page) => {
           setPage(page);
-
           router.push(
             "/account" + generateQueryString({ ...query, _page: page })
           );
-
-          // 주소 바꾸기
         }}
         maxPage={totalPage}
       />
