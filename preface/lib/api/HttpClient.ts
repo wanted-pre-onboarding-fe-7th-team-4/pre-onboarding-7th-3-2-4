@@ -7,11 +7,9 @@ interface HttpClient {
 export abstract class HttpClientImpl implements HttpClient {
   readonly instance: AxiosInstance;
 
-  // TODO: 에러처리
-
-  constructor() {
+  constructor(baseURL: string) {
     this.instance = axios.create({
-      baseURL: "/api"
+      baseURL: baseURL
     });
   }
 }

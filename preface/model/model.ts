@@ -42,6 +42,11 @@ type AccountStatusObject = typeof AccountStatus;
 export type TAccountStatusKey = keyof AccountStatusObject;
 export type TAccountStatusValue = AccountStatusObject[TAccountStatusKey];
 
+export interface LoignVariable {
+  email: string;
+  password: string;
+}
+
 export interface LoginModel {
   accessToken: string;
   user: {
@@ -80,4 +85,9 @@ export interface AccountModel {
   is_active: boolean;
   created_at: Date;
   updated_at: Date;
+}
+
+export interface ILoginData {
+  email: string;
+  password: string;
 }
