@@ -5,6 +5,7 @@ import { getFormattedAccountData } from "lib/utils/getFormattedAccountData";
 import { AccountModel } from "model/model";
 import { useRouter } from "next/router";
 import { queryKeys } from "react-query/constants";
+import useUsers from "./useUsers";
 
 const LIMIT = 20;
 
@@ -46,6 +47,7 @@ export const getPageAccounts = async (
 
 export const useAccounts = () => {
   const { query } = useRouter();
+  const { users } = useUsers();
 
   const { data, refetch, isLoading } = useQuery(
     [queryKeys.accounts, query],
@@ -61,7 +63,7 @@ export const useAccounts = () => {
     isLoading,
     limit: LIMIT,
     cur_page: data?.cur_page,
-    accounts: getFormattedAccountData(data?.data || []),
+    accounts: getFormattedAccountData(data?.data || [], users),
     totalPage: Math.ceil((data?.totalItems || 0) / LIMIT),
     refetch
   };

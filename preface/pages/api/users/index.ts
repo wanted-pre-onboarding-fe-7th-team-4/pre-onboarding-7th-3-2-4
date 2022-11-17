@@ -28,7 +28,7 @@ export default async function usersHandler(
             Authorization: `Bearer ${accessToken}`
           }
         });
-        const [users] = response.data;
+        const users = response.data;
         return res.status(200).json({ users });
       }
       default:
