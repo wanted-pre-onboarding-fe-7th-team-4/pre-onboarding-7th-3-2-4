@@ -4,11 +4,9 @@ import Button from "./Button";
 import Input from "./Input";
 import useLoginInput from "./hook/useLoginInput";
 import { AuthServiceImpl } from "service/AuthService";
+import { CLIENT_BASE_URL } from "../../lib/constants/constants";
 
-const authService = new AuthServiceImpl<{
-  email: string;
-  password: string;
-}>();
+const authService = new AuthServiceImpl(CLIENT_BASE_URL);
 
 const LoginForm = () => {
   //   const router = useRouter();
@@ -17,7 +15,7 @@ const LoginForm = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    authService.login({ email, password });
+    authService.login("api/login", { email, password });
   };
   return (
     <form onSubmit={handleSubmit}>
