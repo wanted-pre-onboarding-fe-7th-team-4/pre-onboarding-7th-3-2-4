@@ -29,44 +29,23 @@ import { AccountModel } from "../model/model";
 //   };
 // };
 
-export type CreateAccountBody = Pick<
-  AccountModel,
-  "user_id" | "broker_id" | "number" | "name" | "assets" | "payments"
->;
-
-export type UpdateAccountBody = Pick<
-  AccountModel,
-  | "id"
-  | "broker_id"
-  | "number"
-  | "name"
-  | "assets"
-  | "payments"
-  | "is_active"
-  | "status"
->;
-
 interface AccountService {
   api: APIServiceImpl;
-  getUserAccounts(
-    endpoint: string,
+  getUserAccounts<TData>(config?: AxiosRequestConfig): Promise<TData | TData[]>;
+  getAccount<TData>(
+    account_id: number,
     config?: AxiosRequestConfig
-  ): Promise<AccountModel[]>;
-  // getSearchAccounts(
-  //   endpoint: string,
-  // ): Promise<Account[]>;
-  // getAccount(id: number, account_id: number): Promise<Account>;
-  createAccount(
-    endpoint: string,
-    body: CreateAccountBody,
+  ): Promise<TData>;
+  createAccount<TData, TVarialbe>(
+    body: TVarialbe,
     config?: AxiosRequestConfig
-  ): Promise<AccountModel>;
-  updateAccount(
-    endpoint: string,
-    body: UpdateAccountBody,
+  ): Promise<TData>;
+  updateAccount<TData, TVarialbe>(
+    accountId: number,
+    body: TVarialbe,
     config?: AxiosRequestConfig
-  ): Promise<AccountModel>;
-  deleteAccount(endpoint: string, config?: AxiosRequestConfig): Promise<void>;
+  ): Promise<TData>;
+  deleteAccount(accountId: number, config?: AxiosRequestConfig): Promise<void>;
 }
 
 export class AccountServiceImpl implements AccountService {
@@ -75,69 +54,61 @@ export class AccountServiceImpl implements AccountService {
     this.api = new APIServiceImpl(baseURL);
   }
 
-  async getUserAccounts(
-    endpoint: string,
-    config?: AxiosRequestConfig
-  ): Promise<AccountModel[]> {
-    const response = await this.api.get<AccountModel[]>(endpoint, {
+  async getUserAccounts<TData>(config?: AxiosRequestConfig): Promise<TData[]> {
+    const response = await this.api.get<TData[]>("accounts", {
       ...config
     });
 
     return response.data;
   }
 
-  // async getSearchAccounts(
-  //   endpoint: string,
-  // ): Promise<Account[]> {
-  //   const response = await this.api.get<Account[]>(
-  //     endpoint
-  //   );
-
-  //   return response.data.map(accountChangeFormat);
-  // }
-
-  // async getAccount(account_id: number): Promise<Account> {
-  //   const response = await this.api.get<Account>(
-  //     `accounts
-  //     ?id=${account_id}`
-  //   );
-
-  //   return accountChangeFormat(response.data);
-  // }
-
-  async createAccount(
-    endpoint: string,
-    body: CreateAccountBody,
+  async getAccount<TData>(
+    account_id: number,
     config?: AxiosRequestConfig
-  ): Promise<AccountModel> {
-    const response = await this.api.post<AccountModel, CreateAccountBody>(
-      endpoint,
-      body,
-      { ...config }
+  ): Promise<TData> {
+    const response = await this.api.get<TData>(
+      `accounts
+      /${account_id}`,
+      {
+        ...config
+      }
     );
 
     return response.data;
   }
 
-  async updateAccount(
-    endpoint: string,
-    body: UpdateAccountBody,
+  async createAccount<TData, TVariable>(
+    body: TVariable,
     config?: AxiosRequestConfig
-  ): Promise<AccountModel> {
-    const response = await this.api.put<AccountModel, UpdateAccountBody>(
-      endpoint,
+  ): Promise<TData> {
+    const response = await this.api.post<TData, TVariable>("accounts", body, {
+      ...config
+    });
+
+    return response.data;
+  }
+
+  async updateAccount<TData, TVariable>(
+    accountId: number,
+    body: TVariable,
+    config?: AxiosRequestConfig
+  ): Promise<TData> {
+    const response = await this.api.put<TData, TVariable>(
+      `account/${accountId}`,
       body,
-      { ...config }
+      {
+        ...config
+      }
     );
 
     return response.data;
   }
 
   async deleteAccount(
-    endpoint: string,
+    accountId: number,
     config?: AxiosRequestConfig
   ): Promise<void> {
-    await this.api.delete(endpoint, {
+    await this.api.delete(`account/${accountId}`, {
       ...config
     });
   }
