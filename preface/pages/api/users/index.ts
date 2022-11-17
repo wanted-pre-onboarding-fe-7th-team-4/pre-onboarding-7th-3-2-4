@@ -14,7 +14,7 @@ export default async function usersHandler(
       method
     } = req;
 
-    const { accessToken } = CookieService.getCookies({ req, res });
+    const { accessToken } = CookieService.getCookies(res, { req, res });
 
     switch (method) {
       case "GET": {

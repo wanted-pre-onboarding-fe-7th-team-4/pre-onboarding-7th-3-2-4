@@ -1,4 +1,5 @@
 import axios, { AxiosError } from "axios";
+import { COOKIE_MAX_AGE } from "lib/constants/constants";
 import { LoginModel } from "model/model";
 import type { NextApiRequest, NextApiResponse } from "next";
 import CookieService from "service/CookieService";
@@ -27,7 +28,7 @@ export default async function loginHandler(
         CookieService.setCookie(JSON.stringify(cookies), {
           req,
           res,
-          maxAge: 3600
+          maxAge: COOKIE_MAX_AGE
         });
         return res.status(200).json({ isLogin: true });
       }

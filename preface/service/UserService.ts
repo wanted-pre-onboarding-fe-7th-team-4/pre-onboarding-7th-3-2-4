@@ -1,12 +1,12 @@
-import { AxiosError } from "axios";
+import { AxiosError, AxiosRequestConfig } from "axios";
 import { AxiosResponse } from "axios";
 import { APIServiceImpl } from "lib/api/API";
 
 interface UserService {
   api: APIServiceImpl;
-  searchUser: <T>(
-    id?: string
-  ) => Promise<AxiosResponse<T> | AxiosError | undefined>;
+  searchUser: <TData>(
+    config?: AxiosRequestConfig
+  ) => Promise<AxiosResponse<TData> | AxiosError | undefined>;
 }
 
 export class UserServiceImpl implements UserService {
@@ -14,8 +14,10 @@ export class UserServiceImpl implements UserService {
   constructor(baseUrl: string) {
     this.api = new APIServiceImpl(baseUrl);
   }
-  searchUser = async <T>(id?: string | undefined) => {
-    const response = await this.api.get<T>(`/users?id=${id}`);
+  searchUser = async <TData>(config?: AxiosRequestConfig) => {
+    const response = await this.api.get<TData>("/users", {
+      ...config
+    });
     return response;
   };
 }
