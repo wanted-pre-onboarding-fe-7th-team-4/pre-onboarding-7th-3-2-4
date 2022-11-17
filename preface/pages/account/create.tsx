@@ -127,10 +127,12 @@ CreateAccount.getLayout = function getLayout(page: ReactElement) {
 };
 
 const Container = styled.div`
+  width: 100%;
   font-size: 1.3rem;
   background-color: ${(props) => props.theme.colors.white1};
   line-height: 2rem;
   padding: 2rem;
+  max-height: 70vh;
 
   form {
     width: 100%;

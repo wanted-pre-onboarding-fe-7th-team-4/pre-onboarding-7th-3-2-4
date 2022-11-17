@@ -59,8 +59,15 @@ function AccountFilter({ query }: Props) {
     );
   };
 
+  const handleCreate = () => {
+    router.push("/account/create");
+  };
+
   return (
     <AccountFilterContainer>
+      <div className="bg-white font-normal text-sm">
+        <CreateButton onClick={handleCreate}>계좌 생성하기</CreateButton>
+      </div>
       <div className="bg-white font-normal text-sm">
         <form onSubmit={onSubmit} onChange={onChange}>
           <div className="item">
@@ -191,4 +198,10 @@ const AccountFilterContainer = styled.div`
       border-radius: 30px;
     }
   }
+`;
+const CreateButton = styled.button`
+  border-radius: 0.4rem;
+  color: white;
+  background-color: ${(props) => props.theme.colors.primary1};
+  padding: 1rem;
 `;

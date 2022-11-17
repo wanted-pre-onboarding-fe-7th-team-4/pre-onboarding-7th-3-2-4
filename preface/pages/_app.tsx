@@ -24,9 +24,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme}>
           <GlobalStyle />
-          {/* <RecoilRoot> */}
           {getLayout(<Component {...pageProps} />)}
-          {/* </RecoilRoot> */}
         </ThemeProvider>
       </QueryClientProvider>
     </>
