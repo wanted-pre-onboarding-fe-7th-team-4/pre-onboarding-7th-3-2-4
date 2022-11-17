@@ -1,5 +1,6 @@
 import React from "react";
 import Content from "./Content";
+import Footer from "./Footer";
 // import Footer from "./Footer";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
@@ -16,7 +17,7 @@ const Layout = ({ title, children }: Props) => {
       <div className={"w-full"}>
         <Header title={title} />
         <Content>{children}</Content>
-        {/* <Footer /> */}
+        <Footer />
       </div>
     </div>
   );

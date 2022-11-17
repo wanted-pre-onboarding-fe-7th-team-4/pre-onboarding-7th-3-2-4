@@ -1,5 +1,4 @@
-import { useRouter } from "next/router";
-import React, { useState, useMemo } from "react";
+import React, { useMemo } from "react";
 import styled from "styled-components";
 
 interface Props {
@@ -9,7 +8,6 @@ interface Props {
 }
 
 function Pagination({ page, maxPage, setPage }: Props) {
-  const router = useRouter();
   const pageButtons = useMemo(
     () => Array.from({ length: maxPage }, (_, index) => index + 1),
     [maxPage]
@@ -25,17 +23,10 @@ function Pagination({ page, maxPage, setPage }: Props) {
 
   return (
     <PaginationContainer>
-      <button
-        className="first"
-        onClick={onBefore}
-        //   onClick={onClickPrev} disabled={page === 1}
-      >
+      <button className="first" onClick={onBefore}>
         {"<"}
       </button>
-      <div
-        className="pageButtonContainer"
-        //    onClick={onClick}
-      >
+      <div className="pageButtonContainer">
         {pageButtons.map((v) => (
           <button
             data-index={v}
@@ -60,8 +51,8 @@ export default Pagination;
 const PaginationContainer = styled.div`
   display: flex;
   justify-content: center;
-  /* gap: 10px; */
-  margin: 20px;
+  padding: 1rem 0;
+  background: white;
 
   button {
     min-width: 30px;

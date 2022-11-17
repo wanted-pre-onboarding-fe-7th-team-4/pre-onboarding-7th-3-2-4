@@ -1,4 +1,4 @@
-import { AccountModel, UserModel } from "../../model/model";
+import { AccountModel } from "../../model/model";
 import { changeToBrokerName } from "./changeToBrokerName";
 import { maskAccountNumber } from "./maskAccountNumber";
 import { getAccountName } from "./getAccountName";
@@ -8,8 +8,7 @@ import { getDate } from "./getDate";
 import { compareTwoNumber } from "./compareTwoNumber";
 
 export const getFormattedAccountData = (
-  accounts?: AccountModel[],
-  users?: UserModel[]
+  accounts?: AccountModel[]
 ): Record<keyof AccountModel, string>[] | undefined => {
   const newAccounts = accounts?.map(
     ({
@@ -29,7 +28,7 @@ export const getFormattedAccountData = (
       return {
         id: id.toString(),
         uuid,
-        user_id: users?.find(({ id }) => id === user_id)?.name || "",
+        user_id: user_id.toString(),
         broker_id: changeToBrokerName(broker_id),
         number: maskAccountNumber(number),
         name: getAccountName(name),
