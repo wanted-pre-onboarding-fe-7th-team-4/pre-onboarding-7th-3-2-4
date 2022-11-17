@@ -1,23 +1,27 @@
 import { APIServiceImpl } from "../lib/api/API";
-interface AuthService<T> {
+import { AxiosResponse, AxiosError } from "axios";
+
+interface AuthService {
   api: APIServiceImpl;
-  login(data: T): void;
-  logout(): void;
+  login: <TData, TVariable>(
+    data: TVariable
+  ) => Promise<AxiosResponse<TData> | AxiosError | undefined>;
+  logout: <TData>() => Promise<AxiosResponse<TData> | AxiosError | undefined>;
 }
 
-export class AuthServiceImpl<T> implements AuthService<T> {
+export class AuthServiceImpl implements AuthService {
   api;
-  constructor() {
-    this.api = new APIServiceImpl();
+  constructor(baseUrl: string) {
+    this.api = new APIServiceImpl(baseUrl);
   }
 
-  login(data: T): void {
-    this.api.post("/login", data);
+  login = <TData, TVariable>(data: TVariable) => {
+    const response = this.api.post<TData, TVariable>("login", data);
+    return response;
+  };
 
-    setTimeout(this.logout, 1000 * 60 * 60);
-  }
-
-  logout(): void {
-    console.log("logout됨");
-  }
+  logout = <TData>() => {
+    const response = this.api.get<TData>("logout");
+    return response;
+  };
 }
