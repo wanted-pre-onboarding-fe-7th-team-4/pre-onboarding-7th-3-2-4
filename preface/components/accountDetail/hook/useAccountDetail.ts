@@ -1,8 +1,9 @@
-import React from "react";
-import { queryKeys } from "./../../../lib/react-query/constants";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
 import { AccountServiceImpl } from "service/AccountService";
+import { queryKeys } from "lib/react-query/constants";
 import { AccountModel } from "model/model";
+import { CLIENT_BASE_URL } from "lib/constants/constants";
 
 export type UpdateAccountBody = Pick<
   AccountModel,
@@ -15,90 +16,59 @@ export type UpdateAccountBody = Pick<
   | "status"
 >;
 
-const accountService = new AccountServiceImpl("http://localhost:3000/api");
+const accountService = new AccountServiceImpl(CLIENT_BASE_URL);
 
-const useAccountDetail = () => {
-  const [accountDetail, setAccountDetail] = React.useState<AccountModel | null>(
-    null
+export const useGetAccountDetail = (id: number) => {
+  return useQuery(
+    [queryKeys.accounts, id],
+    async () =>
+      await accountService.getUserAccounts<{ accounts: AccountModel[] }>({
+        params: {
+          id
+        }
+      }),
+    {
+      enabled: !!id,
+      select: ({ data: { accounts } }) => accounts
+    }
   );
-  const getAccountDetail = (id: number) => {
-    const { isLoading, error } = useQuery(
-      [queryKeys.accounts, id],
-      () =>
-        accountService.getUserAccounts<AccountModel>({
-          params: {
-            id
-          }
-        }),
-      {
-        enabled: !!id,
-        onSuccess: (response) => {
-          const { data } = response;
-          setAccountDetail(data);
-        }
-      }
-    );
-
-    return {
-      accountDetail,
-      isLoading,
-      error
-    };
-  };
-
-  const updateAccountDetail = (id: number, body: UpdateAccountBody) => {
-    const queryClient = useQueryClient();
-
-    const { mutate: onUpdate } = useMutation(
-      () =>
-        accountService.updateAccount<AccountModel, UpdateAccountBody>(body, {
-          params: {
-            id
-          }
-        }),
-      {
-        onSuccess: (response) => {
-          const { data } = response;
-          queryClient.invalidateQueries([queryKeys.accounts]);
-          alert("계좌가 수정되었습니다");
-          setAccountDetail(data);
-        }
-      }
-    );
-
-    return {
-      accountDetail,
-      onUpdate
-    };
-  };
-
-  const deleteAccountDetail = (id: number) => {
-    const queryClient = useQueryClient();
-
-    const { mutate: onDelete } = useMutation(
-      () =>
-        accountService.deleteAccount({
-          params: {
-            id
-          }
-        }),
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries([queryKeys.accounts]);
-          alert("계좌가 삭제되었습니다.");
-          setAccountDetail(null);
-        }
-      }
-    );
-
-    return onDelete;
-  };
-
-  return {
-    getAccountDetail,
-    updateAccountDetail,
-    deleteAccountDetail
-  };
 };
 
-export default useAccountDetail;
+export const useUpdateAccountDetail = (id: number, body: UpdateAccountBody) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    async () =>
+      await accountService.updateAccount<AccountModel, UpdateAccountBody>(
+        body,
+        {
+          params: {
+            id
+          }
+        }
+      ),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries([queryKeys.accounts]);
+      }
+    }
+  );
+};
+
+export const useDeleteAccountDetail = (id: number) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    async () =>
+      await accountService.deleteAccount({
+        params: {
+          id
+        }
+      }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries([queryKeys.accounts]);
+      }
+    }
+  );
+};

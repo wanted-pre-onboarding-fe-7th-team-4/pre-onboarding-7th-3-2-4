@@ -13,12 +13,10 @@ interface IAccountDetailProps {
 const AccountInfo = ({ newAccountDetail, setIsEdit }: IAccountDetailProps) => {
   const {
     id,
-    uuid,
     user_name,
     user_id,
     broker_id,
     broker_name,
-    status,
     status_kr,
     number,
     name,
