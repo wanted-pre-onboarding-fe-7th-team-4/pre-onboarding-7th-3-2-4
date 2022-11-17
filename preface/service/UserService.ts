@@ -1,11 +1,12 @@
-import { AxiosError } from "axios";
+import { AxiosError, AxiosRequestConfig } from "axios";
 import { AxiosResponse } from "axios";
 import { APIServiceImpl } from "lib/api/API";
 
 interface UserService {
   api: APIServiceImpl;
   searchUser: <T>(
-    id?: string
+    id?: string,
+    config?: AxiosRequestConfig
   ) => Promise<AxiosResponse<T> | AxiosError | undefined>;
 }
 
