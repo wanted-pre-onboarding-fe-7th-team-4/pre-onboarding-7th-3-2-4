@@ -1,9 +1,31 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 function AccountFilter() {
+  // const [broker, setBroker] = useState<Broker>();
+  // const [isActive, setIsActive] = useState<number>();
+  // const [status, setStatus] = useState<AccountStatus>();
+  // const [search, setSearch, onChangeSearch] = useInput();
+  // const [searchedText, setSearchedText] = useState<string>();
+
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // setSearchedText(search?.trim());
+  };
+
+  // const onChangeFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  //   if (e.target.value === 'ALL') {
+  //     console.log(e.target.name);
+  //     const newQuery = deleteQueryStringKey(e.target.name, query);
+
+  //     setQuery({ ...query, ...newQuery, _page: 1 });
+  //     return;
+  //   }
+  //   setQuery({ ...query, [e.target.name]: e.target.value, _page: 1 });
+  // };
+
   return (
-    <AccountFilterContainer className="bg-white font-normal text-sm">
+    <div className="bg-white font-normal text-sm">
       <form
       //   onSubmit={onSubmit} onChange={onChange}
       >
@@ -67,71 +89,71 @@ function AccountFilter() {
           <button onClick={() => setSearchedText("")}>X</button>
         </div>
       )} */}
-    </AccountFilterContainer>
+    </div>
   );
 }
 
 export default AccountFilter;
 
-const AccountFilterContainer = styled.div`
-  margin: 0 auto;
-  form {
-    display: flex;
-    flex-wrap: wrap;
-    font-size: 15px;
-  }
-  select,
-  option {
-    text-align: center;
-    min-width: 100px;
-    margin-right: 0.5rem;
-  }
+// const AccountFilterContainer = styled.div`
+//   margin: 0 auto;
+//   form {
+//     display: flex;
+//     flex-wrap: wrap;
+//     font-size: 15px;
+//   }
+//   select,
+//   option {
+//     text-align: center;
+//     min-width: 100px;
+//     margin-right: 0.5rem;
+//   }
 
-  .item {
-    display: flex;
-    align-items: center;
-    label {
-      display: block;
-      padding: 12px 1rem;
-      background: #3b8ef5;
-      text-align: center;
-      color: white;
-    }
-  }
-  input {
-    flex: 1;
-    height: 100%;
-    border: 2px solid #3b8ef5;
-  }
-  .searchButton {
-    width: 100px;
-    background: #3b8ef5;
-    height: 100%;
-    color: white;
-    font-weight: 500;
-  }
-  .searchTextContainer {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    margin-right: 10px;
-    label {
-      display: block;
-      padding: 12px 1rem;
-      background: #3b8ef5;
-      text-align: center;
-      color: white;
-    }
-    p {
-      padding: 1rem 2rem;
-    }
-    button {
-      width: 30px;
-      height: 30px;
-      text-align: center;
-      color: white;
-      background: #3b8ef5;
-      border-radius: 30px;
-    }
-  }
-`;
+//   .item {
+//     display: flex;
+//     align-items: center;
+//     label {
+//       display: block;
+//       padding: 12px 1rem;
+//       background: #3b8ef5;
+//       text-align: center;
+//       color: white;
+//     }
+//   }
+//   input {
+//     flex: 1;
+//     height: 100%;
+//     border: 2px solid #3b8ef5;
+//   }
+//   .searchButton {
+//     width: 100px;
+//     background: #3b8ef5;
+//     height: 100%;
+//     color: white;
+//     font-weight: 500;
+//   }
+//   .searchTextContainer {
+//     display: flex;
+//     justify-content: flex-end;
+//     align-items: center;
+//     margin-right: 10px;
+//     label {
+//       display: block;
+//       padding: 12px 1rem;
+//       background: #3b8ef5;
+//       text-align: center;
+//       color: white;
+//     }
+//     p {
+//       padding: 1rem 2rem;
+//     }
+//     button {
+//       width: 30px;
+//       height: 30px;
+//       text-align: center;
+//       color: white;
+//       background: #3b8ef5;
+//       border-radius: 30px;
+//     }
+//   }
+// `;
