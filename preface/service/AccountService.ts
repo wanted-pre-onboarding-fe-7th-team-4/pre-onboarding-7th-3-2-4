@@ -141,8 +141,8 @@ interface AccountService {
 
 export class AccountServiceImpl implements AccountService {
   api;
-  constructor() {
-    this.api = new APIServiceImpl();
+  constructor(baseURL: string) {
+    this.api = new APIServiceImpl(baseURL);
   }
 
   async getUserAccounts(
@@ -209,6 +209,7 @@ export class AccountServiceImpl implements AccountService {
   ): Promise<Account> {
     //! FIXME token으로 인증된 유저만 가능하도록 변경
     //! uuid 적용하도록 변경
+    //! FIXME id로 찾아서 수정하도록 변경
     console.info(token);
     const response = await this.api.put<Account>(
       `accounts/${id}`,

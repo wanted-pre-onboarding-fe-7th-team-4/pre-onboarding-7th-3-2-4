@@ -19,10 +19,9 @@ interface APIService {
 }
 
 export class APIServiceImpl extends HttpClientImpl implements APIService {
-  constructor() {
-    super();
+  constructor(baseURL: string) {
+    super(baseURL);
   }
-
   get = <T>(endPoint: string, config?: AxiosRequestConfig) => {
     return this.instance.get<T>(endPoint, config);
   };
