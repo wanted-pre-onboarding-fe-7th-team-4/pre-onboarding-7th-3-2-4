@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { accountApi } from "lib/api/instance";
-import { getAccountData } from "lib/utils/getFormattedAccountData";
+import { getFormattedAccountData } from "lib/utils/getFormattedAccountData";
 import { AccountModel, TAccountStatusKey, TBrokersKey } from "model/model";
 import { useRouter } from "next/router";
 import { queryKeys } from "react-query/constants";
@@ -81,10 +81,11 @@ export const useAccounts = () => {
   );
 
   return {
+    query,
     isLoading,
     limit: LIMIT,
     cur_page: data?.cur_page,
-    accounts: getAccountData(data?.data || []),
+    accounts: getFormattedAccountData(data?.data || []),
     totalPage: Math.ceil((data?.totalItems || 0) / LIMIT),
     refetch
   };

@@ -7,10 +7,10 @@ import { getMoney } from "./getMoney";
 import { getDate } from "./getDate";
 import { compareTwoNumber } from "./compareTwoNumber";
 
-export const getAccountData = (
-  accounts: AccountModel[]
-): Record<keyof AccountModel, string>[] => {
-  const newAccounts = accounts.map(
+export const getFormattedAccountData = (
+  accounts?: AccountModel[]
+): Record<keyof AccountModel, string>[] | undefined => {
+  const newAccounts = accounts?.map(
     ({
       id,
       uuid,
@@ -33,7 +33,10 @@ export const getAccountData = (
         number: maskAccountNumber(number), // 링크 정보(계좌 id)
         name: getAccountName(name),
         status: getAccountStatus(status),
-        assets: getMoney(assets) + "|" + compareTwoNumber(Number(assets), Number(payments)),
+        assets:
+          getMoney(assets) +
+          "|" +
+          compareTwoNumber(Number(assets), Number(payments)),
         payments: getMoney(payments),
         is_active: is_active === true ? "활성" : "비활성",
         created_at: getDate(created_at),
