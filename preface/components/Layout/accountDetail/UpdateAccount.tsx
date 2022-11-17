@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Brokers } from "lib/utils/account/changeToBrokerName";
 import { AccountStatus } from "lib/utils/account/getAccountStatus";
-import { useUpdateAccount } from "../../auth/hook/useUpdateAccount";
+
 import {
   AccountModel,
   DashboardModel,
@@ -10,7 +10,7 @@ import {
 } from "model/model";
 import { useUpdateAccountDetail } from "components/accountDetail/hook/useAccountDetail";
 import { useRouter } from "next/router";
-import convertUTCTimeToCustomString from "lib/utils/account/convertUTCTimeToCustomString";
+
 import convertKRTimeToUTC from "lib/utils/account/convertKRTimeToUTC";
 
 interface IUpdateAccount {
@@ -63,7 +63,8 @@ const UpdateAccount = ({ newAccountDetail, setIsEdit }: IUpdateAccount) => {
       isActive !== undefined &&
       newAccountDetail.id &&
       newAccountDetail.created_at &&
-      newAccountDetail.uuid
+      newAccountDetail.uuid &&
+      newAccountDetail.updated_at
     ) {
       const created_at = convertKRTimeToUTC(newAccountDetail.created_at);
       const updated_at = convertKRTimeToUTC(newAccountDetail.updated_at);
