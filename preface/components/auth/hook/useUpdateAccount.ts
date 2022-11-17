@@ -5,7 +5,7 @@ import { AccountServiceImpl } from "service/AccountService";
 
 const accountService = new AccountServiceImpl("http://localhost:3000/api");
 
-const onSubmitAccount = async (account: AccountModel) => {
+const onSubmitAccount = async (account: Omit<AccountModel, "id" | "uuid">) => {
   await accountService.updateAccount(account);
 };
 

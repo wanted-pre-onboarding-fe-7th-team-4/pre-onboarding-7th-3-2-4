@@ -12,7 +12,7 @@ import { VscGraphLine } from "react-icons/vsc";
 const Sidebar = () => {
   const router = useRouter();
   return (
-    <div className="w-1/4 h-screen bg-myDarkBlue text-white ">
+    <div className="h-screen bg-myDarkBlue text-white ">
       <h1 className="w-full flex justify-evenly items-center text-5xl my-5 mx-auto font-bold">
         <Image
           src="/images/logo.png"
