@@ -6,11 +6,7 @@ interface Props {
 
 const Content = ({ children }: Props) => {
   return (
-    <main
-      className={
-        "w-full bg-gray1 flex justify-center items-center p-7 mx-auto h-[calc(100vh-96px)]"
-      }
-    >
+    <main className="w-full h-4/5 bg-myGray min-h-[calc(100vh-112px)]">
       {children}
     </main>
   );

@@ -10,7 +10,6 @@ const Header = ({ title }: HeaderPros) => {
     <header className="flex items-center justify-between w-full h-16 bg-white px-8 border-solid border-b-2 border-myGray">
       <span className="flex flex-wrap items-center justify-evenly w-40 text-l font-semibold ">
         <RiIndentDecrease />
-
         {title}
       </span>
       <div className="w-48 flex justify-between items-center text-l">

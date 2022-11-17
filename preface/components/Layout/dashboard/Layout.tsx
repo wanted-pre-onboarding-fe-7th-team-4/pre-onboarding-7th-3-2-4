@@ -11,7 +11,7 @@ interface Props {
 
 const Layout = ({ title, children }: Props) => {
   return (
-    <div className={"w-full flex h-screen"}>
+    <div className={"w-full flex"}>
       <Sidebar />
       <div className={"w-full"}>
         <Header title={title} />

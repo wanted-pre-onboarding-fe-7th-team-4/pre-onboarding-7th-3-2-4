@@ -10,8 +10,7 @@ import { RecoilRoot } from "recoil";
 
 import GlobalStyle from "styles/GlobalStyle";
 import { theme } from "styles/theme";
-
-const queryClient = new QueryClient();
+import { queryClient } from "react-qeury/queryClient";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
