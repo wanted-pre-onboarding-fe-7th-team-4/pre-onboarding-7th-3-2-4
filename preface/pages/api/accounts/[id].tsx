@@ -10,10 +10,7 @@ export default async function accountsByIdHandler(
   res: NextApiResponse
 ) {
   try {
-    const {
-      query,
-      method
-    } = req;
+    const { query, method } = req;
 
     const { accessToken } = CookieService.getCookies(res, { req, res });
     axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
@@ -21,25 +18,31 @@ export default async function accountsByIdHandler(
 
     switch (method) {
       case "GET": {
-        const response = await accountsService.getUserAccounts<AccountModel[]>({ params : { ...query }});
+        const response = await accountsService.getUserAccounts<AccountModel[]>({
+          params: { ...query }
+        });
+
         res.status(200).json({ account: response.data, isSuccess: true });
         break;
       }
       case "PUT": {
         const { body } = req;
         const { id } = query;
-        const response =  await accountsService.updateAccount<AccountModel, AccountModel>(body, { params : { id }});
+        const response = await accountsService.updateAccount<
+          AccountModel,
+          AccountModel
+        >(body, { params: { id } });
         res.status(200).json({ account: response.data, isSuccess: true });
         break;
       }
       case "DELETE": {
         const { id } = query;
-        await accountsService.deleteAccount({ params : { id }})
+        await accountsService.deleteAccount({ params: { id } });
         res.status(200).json({ isSuccess: true });
         break;
       }
       default:
-        res.setHeader("Allow", ["GET","PUT", "DELETE"]);
+        res.setHeader("Allow", ["GET", "PUT", "DELETE"]);
         res.status(405).end(`Method ${method} Not Allowed`);
     }
   } catch (error) {
