@@ -41,10 +41,11 @@ interface AccountService {
     config?: AxiosRequestConfig
   ): Promise<TData>;
   updateAccount<TData, TVarialbe>(
+    accountId: number,
     body: TVarialbe,
     config?: AxiosRequestConfig
   ): Promise<TData>;
-  deleteAccount(config?: AxiosRequestConfig): Promise<void>;
+  deleteAccount(accountId: number, config?: AxiosRequestConfig): Promise<void>;
 }
 
 export class AccountServiceImpl implements AccountService {
@@ -54,7 +55,7 @@ export class AccountServiceImpl implements AccountService {
   }
 
   async getUserAccounts<TData>(config?: AxiosRequestConfig): Promise<TData[]> {
-    const response = await this.api.get<TData[]>("account", {
+    const response = await this.api.get<TData[]>("accounts", {
       ...config
     });
 
@@ -80,7 +81,7 @@ export class AccountServiceImpl implements AccountService {
     body: TVariable,
     config?: AxiosRequestConfig
   ): Promise<TData> {
-    const response = await this.api.post<TData, TVariable>("account", body, {
+    const response = await this.api.post<TData, TVariable>("accounts", body, {
       ...config
     });
 
@@ -88,18 +89,26 @@ export class AccountServiceImpl implements AccountService {
   }
 
   async updateAccount<TData, TVariable>(
+    accountId: number,
     body: TVariable,
     config?: AxiosRequestConfig
   ): Promise<TData> {
-    const response = await this.api.put<TData, TVariable>("account", body, {
-      ...config
-    });
+    const response = await this.api.put<TData, TVariable>(
+      `account/${accountId}`,
+      body,
+      {
+        ...config
+      }
+    );
 
     return response.data;
   }
 
-  async deleteAccount(config?: AxiosRequestConfig): Promise<void> {
-    await this.api.delete("account", {
+  async deleteAccount(
+    accountId: number,
+    config?: AxiosRequestConfig
+  ): Promise<void> {
+    await this.api.delete(`account/${accountId}`, {
       ...config
     });
   }
