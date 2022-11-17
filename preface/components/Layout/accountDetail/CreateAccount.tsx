@@ -3,24 +3,29 @@ import { Brokers } from "lib/utils/account/changeToBrokerName";
 import { AccountStatus } from "lib/utils/account/getAccountStatus";
 import { useCreateAccount } from "components/auth/hook/useCreateAccount";
 import { AccountType } from "lib/types/types";
+import { AccountModel } from "model/model";
 
 // TODO: Form validation
 const CreateAccount = () => {
   const onCreate = useCreateAccount();
-  const [accountValue, setAccountValue] = useState({
+  const [accountValue, setAccountValue] = useState<
+    Omit<AccountModel, "id" | "uuid">
+  >({
     broker_id: "209",
-    status: "1",
+    status: 1,
     assets: "",
     payments: "",
-    is_active: "true",
+    is_active: true,
     number: "",
     name: "",
-    user_id: ""
+    user_id: 123,
+    created_at: new Date(),
+    updated_at: new Date()
   });
 
   // FIXME: 버튼 작동 고치기 VALIDATION
   const disable =
-    accountValue.user_id === "" ||
+    accountValue.user_id === 0 ||
     accountValue.name === "" ||
     accountValue.number === "" ||
     accountValue.assets === "" ||
@@ -41,13 +46,7 @@ const CreateAccount = () => {
   const onCreateAccount = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const newAccount: AccountType = {
-      ...accountValue,
-      created_at: new Date(),
-      updated_at: new Date()
-    };
-
-    onCreate(newAccount);
+    onCreate(accountValue);
   };
 
   return (

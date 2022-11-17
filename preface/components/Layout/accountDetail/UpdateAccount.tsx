@@ -3,25 +3,29 @@ import { Brokers } from "lib/utils/account/changeToBrokerName";
 import { AccountStatus } from "lib/utils/account/getAccountStatus";
 import { AccountType } from "lib/types/types";
 import { useUpdateAccount } from "../../auth/hook/useUpdateAccount";
+import { AccountModel } from "model/model";
 
 // TODO: Form validation
 const UpdateAccount = () => {
   const onUpdate = useUpdateAccount();
-  const [accountValue, setAccountValue] = useState({
+  const [accountValue, setAccountValue] = useState<
+    Omit<AccountModel, "id" | "uuid">
+  >({
     broker_id: "209",
-    status: "1",
+    status: 1,
     assets: "",
     payments: "",
-    is_active: "true",
+    is_active: true,
     number: "",
     name: "",
-    user_id: "",
-    created_at: new Date()
+    user_id: 123,
+    created_at: new Date(),
+    updated_at: new Date()
   });
 
   // FIXME: 버튼 작동 고치기 VALIDATION
   const disable =
-    accountValue.user_id === "" ||
+    accountValue.user_id === 0 ||
     accountValue.name === "" ||
     accountValue.number === "" ||
     accountValue.assets === "" ||
@@ -42,12 +46,7 @@ const UpdateAccount = () => {
   const onUpdateAccount = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const updatedAccount: AccountType = {
-      ...accountValue,
-      updated_at: new Date()
-    };
-
-    onUpdate(updatedAccount);
+    onUpdate(accountValue);
   };
 
   return (
