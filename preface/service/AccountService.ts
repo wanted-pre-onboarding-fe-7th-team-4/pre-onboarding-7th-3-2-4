@@ -1,33 +1,33 @@
 import { AxiosRequestConfig } from "axios";
 import { APIServiceImpl } from "../lib/api/API";
-import { Brokers, AccountStatus, AccountModel } from "../model/model";
+import { AccountModel } from "../model/model";
 
-const changeAccountNumberFormat = (account: AccountModel) => {
-  const format = Brokers[account.broker_id];
-  const number = account.number;
-  let result = "";
-  let index = 0;
-  for (let i = 0; i < format.length; i++) {
-    if (format[i] === "-") {
-      result += "-";
-    } else if (i < 2 && i > format.length - 3) {
-      result += number[index];
-      index++;
-    } else {
-      result += "*";
-    }
-  }
-  return result;
-};
+// const changeAccountNumberFormat = (account: AccountModel) => {
+//   const format = Brokers[account.broker_id];
+//   const number = account.number;
+//   let result = "";
+//   let index = 0;
+//   for (let i = 0; i < format.length; i++) {
+//     if (format[i] === "-") {
+//       result += "-";
+//     } else if (i < 2 && i > format.length - 3) {
+//       result += number[index];
+//       index++;
+//     } else {
+//       result += "*";
+//     }
+//   }
+//   return result;
+// };
 
-const accountChangeFormat = (account: AccountModel) => {
-  return {
-    ...account,
-    broker_name: Brokers[account.broker_id],
-    status_name: AccountStatus[account.status],
-    number: changeAccountNumberFormat(account)
-  };
-};
+// const accountChangeFormat = (account: AccountModel) => {
+//   return {
+//     ...account,
+//     broker_name: Brokers[account.broker_id],
+//     status_name: AccountStatus[account.status],
+//     number: changeAccountNumberFormat(account)
+//   };
+// };
 
 export type CreateAccountBody = Pick<
   AccountModel,
@@ -83,7 +83,7 @@ export class AccountServiceImpl implements AccountService {
       ...config
     });
 
-    return response.data.map(accountChangeFormat);
+    return response.data;
   }
 
   // async getSearchAccounts(
@@ -116,7 +116,7 @@ export class AccountServiceImpl implements AccountService {
       { ...config }
     );
 
-    return accountChangeFormat(response.data);
+    return response.data;
   }
 
   async updateAccount(
@@ -130,7 +130,7 @@ export class AccountServiceImpl implements AccountService {
       { ...config }
     );
 
-    return accountChangeFormat(response.data);
+    return response.data;
   }
 
   async deleteAccount(
