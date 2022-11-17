@@ -1599,6 +1599,11 @@
       "last_login": "2022-01-11T12:10:46.859Z",
       "created_at": "2021-11-13T08:37:45.517Z",
       "updated_at": "2020-04-23T16:40:54.223Z"
+    },
+    {
+      "email": "newface@dco.com",
+      "password": "$2a$10$ddIhmAeKAfRLVVluxeqGB.DrCwDPIupQOg/REJ2gRW.ojMOqvOAwO",
+      "id": 101
     }
   ],
   "userSetting": [
