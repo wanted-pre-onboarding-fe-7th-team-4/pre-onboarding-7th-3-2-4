@@ -1,13 +1,12 @@
 import { APIServiceImpl } from "../lib/api/API";
-import { ILoginData, UserModel } from "../model/model";
 import { AxiosResponse, AxiosError } from "axios";
+
 interface AuthService {
   api: APIServiceImpl;
-  login(
-    endPoint: string,
-    data: ILoginData
-  ): Promise<AxiosResponse<UserModel> | AxiosError | undefined>;
-  logout(): void;
+  login: <TData, TVariable>(
+    data: TVariable
+  ) => Promise<AxiosResponse<TData> | AxiosError | undefined>;
+  logout: <TData>() => Promise<AxiosResponse<TData> | AxiosError | undefined>;
 }
 
 export class AuthServiceImpl implements AuthService {
@@ -16,14 +15,13 @@ export class AuthServiceImpl implements AuthService {
     this.api = new APIServiceImpl(baseUrl);
   }
 
-  async login(endPoint: string, data: ILoginData) {
-    const response = this.api.post<UserModel, ILoginData>(endPoint, data);
+  login = <TData, TVariable>(data: TVariable) => {
+    const response = this.api.post<TData, TVariable>("login", data);
     return response;
-    // setTimeout(this.logout, 1000 * 60 * 60);
-  }
+  };
 
-  logout(): void {
-    console.log("logout됨");
-    // this.api.get('/logout')
-  }
+  logout = <TData>() => {
+    const response = this.api.get<TData>("logout");
+    return response;
+  };
 }
