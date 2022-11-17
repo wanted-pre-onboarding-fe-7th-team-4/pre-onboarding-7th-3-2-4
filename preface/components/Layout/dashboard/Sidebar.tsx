@@ -15,7 +15,7 @@ const Sidebar = () => {
     <div className="w-1/4 h-screen bg-myDarkBlue text-white ">
       <h1 className="w-full flex justify-evenly items-center text-5xl my-5 mx-auto font-bold">
         <Image
-          src="/logo.png"
+          src="/images/logo.png"
           alt="PREFACE Logo"
           width={50}
           height={50}
@@ -27,7 +27,7 @@ const Sidebar = () => {
         <a className="flex items-center w-full h-16 pl-8 hover:text-white">
           <AiOutlineDashboard /> 대시 보드
         </a>
-        <Link href="/accounts">
+        <Link legacyBehavior href="/accounts">
           <a
             className={`flex items-center w-full h-16 pl-8 hover:text-white ${
               router.pathname === "/accounts" ? "bg-myBlue text-white" : ""
@@ -36,7 +36,7 @@ const Sidebar = () => {
             <VscGraphLine /> 투자 계좌
           </a>
         </Link>
-        <Link href="/users">
+        <Link legacyBehavior href="/users">
           <a
             className={`flex items-center w-full h-16 pl-8 hover:text-white ${
               router.pathname === "/users" ? "bg-myBlue text-white" : ""
@@ -45,7 +45,7 @@ const Sidebar = () => {
             <AiOutlineUser /> 사용자
           </a>
         </Link>
-        <Link href="/logout">
+        <Link legacyBehavior href="/logout">
           <a className="flex items-center w-full h-16 pl-8 hover:text-white">
             <AiOutlineLogout /> 로그아웃
           </a>
