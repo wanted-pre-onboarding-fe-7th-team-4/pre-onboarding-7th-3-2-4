@@ -5,26 +5,13 @@ import styled from "styled-components";
 import AccountInfo from "components/Layout/accountDetail/AccountInfo";
 import { AccountModel, UserModel } from "model/model";
 import { changeNewAccountDataForDashBoard } from "lib/utils/account/changeNewAccountDataForDashBoard";
+import useAccountDetail from "components/accountDetail/hook/useAccountDetail";
 
 export default function Accounts() {
   const [isEdit, setIsEdit] = useState(false);
+  const { getAccountDetail } = useAccountDetail();
+  const { accountDetail } = getAccountDetail(81);
 
-  const accountDetail: AccountModel[] = [
-    {
-      id: 376,
-      user_id: 81,
-      uuid: "c5f476ab-8c08-42ac-bf65-dac71aef237a",
-      broker_id: "209",
-      status: 9999,
-      number: "597146468431",
-      name: "Personal Loan Account",
-      assets: "120062438.72",
-      payments: "564769162.38",
-      is_active: false,
-      created_at: new Date("2020-08-14T17:52:46.542Z"),
-      updated_at: new Date("2021-04-03T18:12:33.767Z")
-    }
-  ];
   const user: UserModel[] = [
     {
       id: 81,
@@ -46,7 +33,7 @@ export default function Accounts() {
   ];
 
   const [newAccountDetail] = changeNewAccountDataForDashBoard(
-    accountDetail,
+    accountDetail ? [accountDetail] : undefined,
     user
   );
 

@@ -5,7 +5,7 @@ import changeBrokerCodeToKorean from "./changeBrokerCodeToKorean";
 import convertUTCTimeToCustomString from "./convertUTCTimeToCustomString";
 
 export const changeNewAccountDataForDashBoard = (
-  accounts: AccountModel[] | undefined,
+  accounts: AccountModel[] | undefined | null,
   users: UserModel[] | (UserModel | undefined)[] | undefined
 ): DashboardModel[] | [] =>
   accounts?.map((account) => ({
