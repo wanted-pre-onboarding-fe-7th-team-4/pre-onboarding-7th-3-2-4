@@ -8,7 +8,7 @@ export default async function accountsHandler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { method, query } = req;
+  const { method, query, body } = req;
 
   switch (method) {
     case "GET": {
@@ -23,6 +23,22 @@ export default async function accountsHandler(
         }
       );
 
+      const responseHeaders = response.headers as AxiosResponseHeaders;
+      const accounts = response.data;
+      const totalItems = Number(responseHeaders.get("x-total-count"));
+      return res.status(200).json({ accounts, totalItems });
+    }
+    case "POST": {
+      const { accessToken } = CookieService.getCookies({ req, res });
+      const response = await axios.post<AccountModel>(
+        "http://localhost:4000/accounts",
+        body,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
+        }
+      );
       const responseHeaders = response.headers as AxiosResponseHeaders;
       const accounts = response.data;
       const totalItems = Number(responseHeaders.get("x-total-count"));
