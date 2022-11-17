@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import Logo from "lib/assets/logo.png";
-import Footer from "../Footer";
+import Footer from "../dashboard/Footer";
 
 interface Props {
   children: React.ReactNode;
