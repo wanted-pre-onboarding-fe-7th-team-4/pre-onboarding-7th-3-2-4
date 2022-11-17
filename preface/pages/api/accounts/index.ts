@@ -14,7 +14,8 @@ export default async function accountsHandler(
     switch (method) {
       case "GET": {
         const queries = generateQueryString(query);
-        const { accessToken } = CookieService.getCookies({ req, res });
+        const { accessToken } = CookieService.getCookies(res, { req, res });
+
         const response = await axios.get<AccountModel[]>(
           `http://localhost:4000/accounts${queries}`,
           {
@@ -30,7 +31,7 @@ export default async function accountsHandler(
         return res.status(200).json({ accounts, totalItems });
       }
       case "POST": {
-        const { accessToken } = CookieService.getCookies({ req, res });
+        const { accessToken } = CookieService.getCookies(res, { req, res });
         const response = await axios.post<AccountModel>(
           "http://localhost:4000/accounts",
           body,
@@ -40,6 +41,7 @@ export default async function accountsHandler(
             }
           }
         );
+        console.log(response);
         const responseHeaders = response.headers as AxiosResponseHeaders;
         const accounts = response.data;
         const totalItems = Number(responseHeaders.get("x-total-count"));
