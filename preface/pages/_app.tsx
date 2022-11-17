@@ -6,13 +6,13 @@ import type { AppProps } from "next/app";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { ThemeProvider } from "styled-components";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { RecoilRoot } from "recoil";
 
 import GlobalStyle from "styles/GlobalStyle";
 import { theme } from "styles/theme";
 
 const queryClient = new QueryClient();
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
@@ -28,7 +28,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme}>
           <GlobalStyle />
-          <RecoilRoot>{getLayout(<Component {...pageProps} />)}</RecoilRoot>
+          {getLayout(<Component {...pageProps} />)}
           <ReactQueryDevtools initialIsOpen={false} />
         </ThemeProvider>
       </QueryClientProvider>
