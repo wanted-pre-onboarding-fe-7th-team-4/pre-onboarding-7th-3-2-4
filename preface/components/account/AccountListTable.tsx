@@ -7,11 +7,9 @@ interface Props {
   accountsData?: Record<keyof AccountModel, string>[];
 }
 function AccountListTable({ accountsData }: Props) {
-  // 데이터가 변경될때마다 가공이 되어야한다.
-
   return (
     <div>
-      <table className="bg-white font-normal text-sm">
+      <table className="bg-white font-normal text-sm text-center">
         <thead className="bg-myBeige">
           <tr>
             {accountTableColumns.map((it) => (
@@ -20,11 +18,10 @@ function AccountListTable({ accountsData }: Props) {
           </tr>
         </thead>
         <tbody>
-          {/* TODO: 밖에서 가공해서.. */}
           {accountsData?.map((row, index) => (
             <tr key={index}>
               {accountTableColumns.map(({ key }) => {
-                return <AccountItemTable row={row} column={key} key={key} />
+                return <AccountItemTable row={row} column={key} key={key} />;
               })}
             </tr>
           ))}

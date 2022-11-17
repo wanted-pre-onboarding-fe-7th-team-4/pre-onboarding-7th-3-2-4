@@ -34,7 +34,7 @@ export const useGetUser = (id: number) => {
   return useQuery(
     ["users", id],
     async () =>
-      await userService.searchUser<{ users: UserModel }>({ params: { id } }),
+      await userService.searchUser<{ users: UserModel[] }>({ params: { id } }),
     {
       select: ({ data: { users } }) => users
     }
@@ -79,7 +79,7 @@ export const useGetAccountAndUser = (id: number) => {
     if (isSuccess) {
       const [newAccountDetail] = changeNewAccountDataForDashBoard(
         accounts ? accounts : [],
-        [user]
+        user
       );
       setDetial(newAccountDetail);
     }

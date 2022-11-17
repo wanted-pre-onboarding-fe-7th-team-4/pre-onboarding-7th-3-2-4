@@ -5,9 +5,6 @@ import { NextPage } from "next";
 import type { AppProps } from "next/app";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "styled-components";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-// import { RecoilRoot } from "recoil";
-
 import GlobalStyle from "styles/GlobalStyle";
 import { theme } from "styles/theme";
 import { queryClient } from "react-query/queryClient";
@@ -30,7 +27,6 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
           {/* <RecoilRoot> */}
           {getLayout(<Component {...pageProps} />)}
           {/* </RecoilRoot> */}
-          <ReactQueryDevtools initialIsOpen={false} />
         </ThemeProvider>
       </QueryClientProvider>
     </>

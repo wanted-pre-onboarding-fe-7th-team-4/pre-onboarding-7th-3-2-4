@@ -1,11 +1,3 @@
-// export interface Queries {
-//   q?: string | string[];
-//   _page?: string | string[];
-//   _limit?: string | string[];
-//   _sort?: string | string[];
-//   _order?: string | string[];
-// }
-
 export type AccountType = {
   id?: string;
   user_id: string;
@@ -22,11 +14,11 @@ export type AccountType = {
 };
 
 export interface Queries {
-  q?: string | string[];
+  q?: string;
   _page?: number;
   _limit?: number;
-  _sort?: string | string[];
-  _order?: string | string[];
+  _sort?: string;
+  _order?: string;
   broker_id?: string;
   status?: string;
   is_active?: boolean;

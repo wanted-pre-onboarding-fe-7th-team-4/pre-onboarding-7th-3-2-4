@@ -11,10 +11,8 @@ import { useRouter } from "next/router";
 import { generateQueryString } from "lib/utils/generateQueryString";
 
 const AccountPage: NextPageWithLayout = () => {
-  const { accounts, totalPage, refetch, limit, cur_page, query } =
-    useAccounts();
-
-  const [page, setPage] = useState(cur_page || 1);
+  const { accounts, totalPage, query } = useAccounts();
+  const [page, setPage] = useState<number>();
   const router = useRouter();
 
   const [showChild, setShowChild] = useState(false);
@@ -22,24 +20,25 @@ const AccountPage: NextPageWithLayout = () => {
     setShowChild(true);
   }, []);
 
+  useEffect(() => {
+    if (query._page !== undefined) setPage(Number(query._page));
+  }, [query._page]);
+
   if (!showChild) return null;
 
   if (typeof window === "undefined") return <></>;
 
   return (
     <Container className="w-full">
-      <AccountFilter />
+      <AccountFilter query={query} />
       <AccountListTable accountsData={accounts} />
       <Pagination
-        page={page}
+        page={page || 1}
         setPage={(page) => {
           setPage(page);
-
           router.push(
             "/account" + generateQueryString({ ...query, _page: page })
           );
-
-          // 주소 바꾸기
         }}
         maxPage={totalPage}
       />
@@ -55,8 +54,7 @@ const Container = styled.div`
   table {
     border-collapse: collapse;
     border: 1px solid #f0f0f0;
-    width: 95%;
-    margin: 2.5rem auto;
+    width: 100%;
   }
   th {
     padding: 0.8rem;
@@ -81,11 +79,8 @@ const Container = styled.div`
   }
 `;
 export function getServerSideProps({ query }: any) {
-  // if query object was received, return it as a router prop:
   if (query._p) {
     return { props: { router: { query } } };
   }
-  // obtain candidateId elsewhere, redirect or fallback to some default value:
-  /* ... */
   return { props: { router: { query: { candidateId: 8432 } } } };
 }
