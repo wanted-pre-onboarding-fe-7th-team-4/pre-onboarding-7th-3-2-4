@@ -1,7 +1,9 @@
 import { queryKeys } from "../../../lib/react-query/constants";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { AccountType } from "lib/types/types";
-import { accountService } from "service/AccountsService";
+import { AccountServiceImpl } from "service/AccountService";
+import { CLIENT_BASE_URL } from "lib/constants/constants";
+const accountService = new AccountServiceImpl(CLIENT_BASE_URL);
 
 const onSubmitAccount = async (account: AccountType) => {
   await accountService.updateAccount(account);
