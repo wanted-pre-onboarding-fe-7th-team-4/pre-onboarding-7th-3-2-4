@@ -22,11 +22,11 @@ export type AccountType = {
 };
 
 export interface Queries {
-  q?: string | string[];
+  q?: string;
   _page?: number;
   _limit?: number;
-  _sort?: string | string[];
-  _order?: string | string[];
+  _sort?: string;
+  _order?: string;
   broker_id?: string;
   status?: string;
   is_active?: boolean;

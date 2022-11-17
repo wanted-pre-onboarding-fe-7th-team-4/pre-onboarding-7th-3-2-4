@@ -30,8 +30,6 @@ const CreateAccount = () => {
     accountValue.assets === "" ||
     accountValue.payments === "";
 
-  console.log(disable, "disable");
-
   const isDisable = disable
     ? "bg-indigo-300"
     : "bg-indigo-600 hover:bg-indigo-700";
