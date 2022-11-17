@@ -27,7 +27,7 @@ export default async function loginHandler(
         CookieService.setCookie(JSON.stringify(cookies), {
           req,
           res,
-          maxAge: 3600
+          maxAge: 3500
         });
         return res.status(200).json({ isLogin: true });
       }
