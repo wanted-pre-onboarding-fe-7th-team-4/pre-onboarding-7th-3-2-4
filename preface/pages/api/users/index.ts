@@ -1,8 +1,11 @@
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
+import { SERVER_BASE_URL } from "lib/constants/constants";
 
 import { UserModel } from "model/model";
 import type { NextApiRequest, NextApiResponse } from "next";
+
 import CookieService from "service/CookieService";
+import { UserServiceImpl } from "service/UserService";
 
 export default async function usersHandler(
   req: NextApiRequest,
@@ -16,20 +19,21 @@ export default async function usersHandler(
 
     const { accessToken } = CookieService.getCookies(res, { req, res });
 
+    const userService = new UserServiceImpl(SERVER_BASE_URL);
     switch (method) {
       case "GET": {
-        const response = await axios.get<UserModel[]>(
-          `http://localhost:4000/users?${id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`
-            }
+        const response = await userService.searchUser<UserModel[]>({
+          params: { id },
+          headers: {
+            Authorization: `Bearer ${accessToken}`
           }
-        );
-
+        });
         const [users] = response.data;
         return res.status(200).json({ users });
       }
+      default:
+        res.setHeader("Allow", ["POST"]);
+        res.status(405).end(`Method ${method} Not Allowed`);
     }
   } catch (error) {
     if (error instanceof AxiosError) {

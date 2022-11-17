@@ -6,12 +6,12 @@ interface AccountService {
   getUserAccounts<TData>(
     config?: AxiosRequestConfig
   ): Promise<AxiosResponse<TData>>;
-  createAccount<TData, TVarialbe>(
-    body: TVarialbe,
+  createAccount<TData, TVariable>(
+    body: TVariable,
     config?: AxiosRequestConfig
   ): Promise<AxiosResponse<TData>>;
-  updateAccount<TData, TVarialbe>(
-    body: TVarialbe,
+  updateAccount<TData, TVariable>(
+    body: TVariable,
     config?: AxiosRequestConfig
   ): Promise<AxiosResponse<TData>>;
   deleteAccount(config?: AxiosRequestConfig): Promise<void>;
@@ -48,7 +48,7 @@ export class AccountServiceImpl implements AccountService {
     body: TVariable,
     config?: AxiosRequestConfig
   ): Promise<AxiosResponse<TData>> {
-    const response = await this.api.put<TData, TVariable>("account", body, {
+    const response = await this.api.put<TData, TVariable>("accounts", body, {
       ...config
     });
 
@@ -56,7 +56,7 @@ export class AccountServiceImpl implements AccountService {
   }
 
   async deleteAccount(config?: AxiosRequestConfig): Promise<void> {
-    await this.api.delete("account", {
+    await this.api.delete("accounts", {
       ...config
     });
   }

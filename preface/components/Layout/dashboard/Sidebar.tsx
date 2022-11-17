@@ -28,9 +28,13 @@ const Sidebar = () => {
         PREFACE
       </h1>
       <nav className="flex flex-wrap justify-center text-xl text-neutral-500">
-        <a className="flex items-center w-full h-16 pl-8 gap-5 hover:text-white hover:bg-blue-900">
+        <ActiveLink
+          href=""
+          activeClassName="bg-primary3 text-white"
+          className="flex items-center w-full h-16 pl-8 gap-5 hover:text-white hover:bg-blue-900"
+        >
           <AiOutlineDashboard /> 대시 보드
-        </a>
+        </ActiveLink>
         <ActiveLink
           href="/account"
           activeClassName="bg-primary3 text-white"
