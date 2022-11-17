@@ -15,7 +15,7 @@ const LoginForm = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    authService.login("api/login", { email, password });
+    authService.login({ email, password });
   };
   return (
     <form onSubmit={handleSubmit}>
