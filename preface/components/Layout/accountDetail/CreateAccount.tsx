@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Brokers } from "lib/utils/account/changeToBrokerName";
 import { AccountStatus } from "lib/utils/account/getAccountStatus";
 import { useCreateAccount } from "components/auth/hook/useCreateAccount";
-import { AccountType } from "lib/types/types";
+import { AccountModel } from "model/model";
 
 // TODO: Form validation
 const CreateAccount = () => {
@@ -41,7 +41,7 @@ const CreateAccount = () => {
   const onCreateAccount = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const newAccount: AccountType = {
+    const newAccount: AccountModel = {
       ...accountValue,
       created_at: new Date(),
       updated_at: new Date()
