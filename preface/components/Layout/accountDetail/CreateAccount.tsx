@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Brokers } from "lib/utils/account/changeToBrokerName";
 import { AccountStatus } from "lib/utils/account/getAccountStatus";
 import { useCreateAccount } from "components/auth/hook/useCreateAccount";
-import { AccountType } from "lib/types/types";
 import { AccountModel } from "model/model";
 
 // TODO: Form validation
@@ -25,7 +24,7 @@ const CreateAccount = () => {
 
   // FIXME: 버튼 작동 고치기 VALIDATION
   const disable =
-    accountValue.user_id === 0 ||
+    // accountValue.user_id === "" ||
     accountValue.name === "" ||
     accountValue.number === "" ||
     accountValue.assets === "" ||
@@ -46,6 +45,13 @@ const CreateAccount = () => {
   const onCreateAccount = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    const newAccount: Omit<AccountModel, "id" | "uuid"> = {
+      ...accountValue,
+      created_at: new Date(),
+      updated_at: new Date()
+    };
+
+    onCreate(newAccount);
     onCreate(accountValue);
   };
 
@@ -57,11 +63,13 @@ const CreateAccount = () => {
             <div className="w-full">
               <div className=" relative ">
                 <input
-                  type="text"
+                  type="number"
                   name="user_id"
                   className=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-gray-100 text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
                   placeholder="고객명"
                   onChange={onChange}
+                  min={1}
+                  max={100}
                 />
               </div>
             </div>
