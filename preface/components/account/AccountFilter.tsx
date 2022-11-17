@@ -8,7 +8,7 @@ import {
   TBrokersKey
 } from "model/model";
 import { useRouter } from "next/router";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import useInput from "./hook/useInput";
 
@@ -16,28 +16,25 @@ interface Props {
   query: Queries;
 }
 function AccountFilter({ query }: Props) {
-  const [search, setSearch, onChangeSearch] = useInput();
-  const [qText, setQText] = useState<string>();
+  const [search, _, onChangeSearch] = useInput();
+  const [qText, setQText] = useState<string>(query.q || "");
 
   const router = useRouter();
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setQText(search?.trim());
-  };
-
-  useEffect(() => {
-    if (qText)
+    if (search) {
       router.push(
-        "/account" + generateQueryString({ ...query, q: qText, _page: 1 })
+        "/account" + generateQueryString({ ...query, q: search, _page: 1 })
       );
-    else {
+    } else {
       router.push(
         "/account" +
           generateQueryString(deleteQueryStringKey("q", { ...query, _page: 1 }))
       );
     }
-  }, [qText]);
+  };
 
   const onChange = (e: React.ChangeEvent<HTMLFormElement>) => {
     if (e.target.name === "q") return;
@@ -68,10 +65,8 @@ function AccountFilter({ query }: Props) {
         <form onSubmit={onSubmit} onChange={onChange}>
           <div className="item">
             <label>증권사</label>
-            <select name="broker_id">
-              <option selected value={undefined}>
-                선택
-              </option>
+            <select name="broker_id" defaultValue={query.broker_id || "선택"}>
+              <option value={undefined}>선택</option>
               {Object.keys(Brokers).map((broker_id, i) => (
                 <option key={i} value={broker_id}>
                   {Brokers[broker_id as TBrokersKey]}
@@ -81,16 +76,19 @@ function AccountFilter({ query }: Props) {
           </div>
           <div className="item">
             <label>계좌활성여부</label>
-            <select name="is_active">
-              <option selected>선택</option>
+            <select
+              name="is_active"
+              defaultValue={`${query.is_active}` || "선택"}
+            >
+              <option>선택</option>
               <option value={"true"}>활성</option>
               <option value={"false"}>비활성</option>
             </select>
           </div>
           <div className="item">
             <label>계좌상태</label>
-            <select name="status">
-              <option selected>선택</option>
+            <select name="status" defaultValue={query.status || "선택"}>
+              <option>선택</option>
               {Object.keys(AccountStatus).map((status, i) => (
                 <option key={i} value={status}>
                   {AccountStatus[status as unknown as TAccountStatusKey]}
@@ -110,7 +108,19 @@ function AccountFilter({ query }: Props) {
           <div className="searchTextContainer">
             <label>검색된 내용</label>
             <p>{qText}</p>
-            <button onClick={() => setQText("")}>X</button>
+            <button
+              onClick={() => {
+                setQText("");
+                router.push(
+                  "/account" +
+                    generateQueryString(
+                      deleteQueryStringKey("q", { ...query, _page: 1 })
+                    )
+                );
+              }}
+            >
+              X
+            </button>
           </div>
         )}
       </div>

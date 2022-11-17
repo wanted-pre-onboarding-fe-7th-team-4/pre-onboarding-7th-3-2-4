@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { accountApi } from "lib/api/instance";
-import { PageAccountsQuery } from "lib/interfaces/queries";
+import { Queries } from "lib/types/types";
 import { getFormattedAccountData } from "lib/utils/getFormattedAccountData";
 import { AccountModel } from "model/model";
 import { useRouter } from "next/router";
@@ -8,28 +8,13 @@ import { queryKeys } from "react-query/constants";
 
 const LIMIT = 20;
 
-// interface AccountsQuery {
-//   broker_id?: TBrokersKey;
-//   is_active?: boolean;
-//   user_id?: number;
-//   status?: TAccountStatusKey;
-//   name?: string;
-//   _page?: number;
-//   q?: string;
-// }
-
-// export interface PageAccountsQuery extends AccountsQuery {
-//   _page: number;
-//   _limit: number;
-// }
-
 export interface AccountResponseData {
   totalItems: number;
   data: AccountModel[];
 }
 
 export interface AccountsPage extends AccountResponseData {
-  cur_page: number;
+  cur_page?: number;
 }
 
 interface ResponseModel {
@@ -38,7 +23,7 @@ interface ResponseModel {
 }
 
 export const getPageAccounts = async (
-  params: PageAccountsQuery
+  params: Queries
 ): Promise<AccountsPage> => {
   try {
     const { data } = await accountApi.getUserAccounts<ResponseModel>({
@@ -59,22 +44,12 @@ export const getPageAccounts = async (
   }
 };
 
-//page
-/*
- const {query, data, setPage, setQuery } = useAccounts()
-
- * <filter query page가 변동됐을때도반영되어야함  />
-* <table data/>
- * <page page setpage setpage를 할 수 있는 콜백/>
- */
-
 export const useAccounts = () => {
   const { query } = useRouter();
-  console.log({ query }, "실행됨");
 
   const { data, refetch, isLoading } = useQuery(
     [queryKeys.accounts, query],
-    () => getPageAccounts({ _page: 1, _limit: LIMIT, ...query }),
+    () => getPageAccounts({ _limit: LIMIT, ...query }),
     {
       retry: 3,
       retryDelay: 3000
