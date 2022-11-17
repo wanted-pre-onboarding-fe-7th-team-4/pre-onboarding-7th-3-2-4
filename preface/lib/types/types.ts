@@ -1,10 +1,10 @@
-export interface Queries {
-  q?: string | string[];
-  _page?: string | string[];
-  _limit?: string | string[];
-  _sort?: string | string[];
-  _order?: string | string[];
-}
+// export interface Queries {
+//   q?: string | string[];
+//   _page?: string | string[];
+//   _limit?: string | string[];
+//   _sort?: string | string[];
+//   _order?: string | string[];
+// }
 
 export type AccountType = {
   id?: string;
@@ -20,5 +20,16 @@ export type AccountType = {
   created_at: Date;
   updated_at: Date;
 };
+
+export interface Queries {
+  q?: string | string[];
+  _page?: number;
+  _limit?: number;
+  _sort?: string | string[];
+  _order?: string | string[];
+  broker_id?: string;
+  status?: string;
+  is_active?: boolean;
+}
 
 export type QueryKeys = keyof Queries;

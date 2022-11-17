@@ -1,11 +1,33 @@
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useState, useMemo } from "react";
 import styled from "styled-components";
 
-function Pagination() {
+interface Props {
+  page: number;
+  setPage: (page: number) => void;
+  maxPage: number;
+}
+
+function Pagination({ page, maxPage, setPage }: Props) {
+  const router = useRouter();
+  const pageButtons = useMemo(
+    () => Array.from({ length: maxPage }, (_, index) => index + 1),
+    [maxPage]
+  );
+
+  const onBefore = () => {
+    if (page > 1) setPage(page - 1);
+  };
+
+  const onNext = () => {
+    if (page < maxPage) setPage(page + 1);
+  };
+
   return (
     <PaginationContainer>
       <button
         className="first"
+        onClick={onBefore}
         //   onClick={onClickPrev} disabled={page === 1}
       >
         {"<"}
@@ -14,16 +36,20 @@ function Pagination() {
         className="pageButtonContainer"
         //    onClick={onClick}
       >
-        {/* {Array.from({ length: maxPage }, (_, index) => index + 1).map((v) => (
-      <button data-index={v} key={v} className={v === page ? "active" : ""}>
-        {v}
-      </button>
-    ))} */}
+        {pageButtons.map((v) => (
+          <button
+            data-index={v}
+            key={v}
+            className={v === page ? "active" : ""}
+            onClick={() => {
+              setPage(v);
+            }}
+          >
+            {v}
+          </button>
+        ))}
       </div>
-      <button
-        className="end"
-        //   onClick={onClickNext}  disabled={page === maxPage}
-      >
+      <button className="end" onClick={onNext}>
         {">"}
       </button>
     </PaginationContainer>
@@ -31,7 +57,6 @@ function Pagination() {
 }
 
 export default Pagination;
-
 const PaginationContainer = styled.div`
   display: flex;
   justify-content: center;

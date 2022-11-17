@@ -29,7 +29,7 @@ const Sidebar = () => {
       </h1>
       <nav className="flex flex-wrap justify-center text-xl text-neutral-500">
         <ActiveLink
-          href=""
+          href="#"
           activeClassName="bg-primary3 text-white"
           className="flex items-center w-full h-16 pl-8 gap-5 hover:text-white hover:bg-blue-900"
         >

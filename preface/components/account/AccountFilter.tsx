@@ -11,6 +11,7 @@ function AccountFilter() {
           <label>증권사</label>
           <select
             name="broker_id"
+            value="임시"
             //   value={broker}
           >
             <option selected>선택</option>
@@ -25,6 +26,7 @@ function AccountFilter() {
           <label>계좌활성여부</label>
           <select
             name="is_active"
+            value="임시"
             //   value={isActive ?? undefined}
           >
             <option selected>선택</option>
@@ -36,6 +38,7 @@ function AccountFilter() {
           <label>계좌상태</label>
           <select
             name="status"
+            value="임시"
             //   value={status}
           >
             <option selected>선택</option>
