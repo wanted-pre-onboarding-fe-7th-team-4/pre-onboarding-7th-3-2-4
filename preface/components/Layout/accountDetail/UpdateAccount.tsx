@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Brokers } from "lib/utils/account/changeToBrokerName";
 import { AccountStatus } from "lib/utils/account/getAccountStatus";
-import { useCreateAccount } from "components/auth/hook/useCreateAccount";
 import { AccountType } from "lib/types/types";
+import { useUpdateAccount } from "../../auth/hook/useUpdateAccount";
 
 // TODO: Form validation
-const CreateAccount = () => {
-  const onCreate = useCreateAccount();
+const UpdateAccount = () => {
+  const onUpdate = useUpdateAccount();
   const [accountValue, setAccountValue] = useState({
     broker_id: "209",
     status: "1",
@@ -15,7 +15,8 @@ const CreateAccount = () => {
     is_active: "true",
     number: "",
     name: "",
-    user_id: ""
+    user_id: "",
+    created_at: new Date()
   });
 
   // FIXME: 버튼 작동 고치기 VALIDATION
@@ -38,20 +39,19 @@ const CreateAccount = () => {
     setAccountValue({ ...accountValue, [e.target.name]: e.target.value });
   };
 
-  const onCreateAccount = (e: React.FormEvent<HTMLFormElement>) => {
+  const onUpdateAccount = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const newAccount: AccountType = {
+    const updatedAccount: AccountType = {
       ...accountValue,
-      created_at: new Date(),
       updated_at: new Date()
     };
 
-    onCreate(newAccount);
+    onUpdate(updatedAccount);
   };
 
   return (
-    <form onSubmit={onCreateAccount}>
+    <form onSubmit={onUpdateAccount}>
       <div className="px-4 py-8 sm:px-10">
         <div className="mt-6">
           <div className="w-full space-y-6">
@@ -155,7 +155,7 @@ const CreateAccount = () => {
                   type="submit"
                   className={`py-2 px-4 ${isDisable} focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg`}
                 >
-                  계좌 생성
+                  계좌 수정
                 </button>
               </span>
             </div>
@@ -166,4 +166,4 @@ const CreateAccount = () => {
   );
 };
 
-export default CreateAccount;
+export default UpdateAccount;

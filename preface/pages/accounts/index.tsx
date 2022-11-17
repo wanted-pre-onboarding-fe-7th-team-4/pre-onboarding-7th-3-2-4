@@ -1,3 +1,5 @@
+import CreateAccount from "components/Layout/accountDetail/CreateAccount";
+import UpdateAccount from "components/Layout/accountDetail/UpdateAccount";
 import Modal from "components/Modal";
 
 export default function Accounts() {
@@ -7,7 +9,7 @@ export default function Accounts() {
   return (
     <>
       <Modal closeModal={closeModal}>
-        <CreateAccount />
+        <UpdateAccount />
       </Modal>
     </>
   );
