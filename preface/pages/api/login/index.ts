@@ -32,6 +32,9 @@ export default async function loginHandler(
         });
         return res.status(200).json({ isLogin: true });
       }
+      default:
+        res.setHeader("Allow", ["POST"]);
+        res.status(405).end(`Method ${method} Not Allowed`);
     }
   } catch (error) {
     if (error instanceof AxiosError) {

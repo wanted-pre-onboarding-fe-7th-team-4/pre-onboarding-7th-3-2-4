@@ -31,6 +31,9 @@ export default async function usersHandler(
         const [users] = response.data;
         return res.status(200).json({ users });
       }
+      default:
+        res.setHeader("Allow", ["POST"]);
+        res.status(405).end(`Method ${method} Not Allowed`);
     }
   } catch (error) {
     if (error instanceof AxiosError) {
