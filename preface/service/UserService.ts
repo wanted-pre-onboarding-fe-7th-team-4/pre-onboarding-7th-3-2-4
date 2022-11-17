@@ -4,10 +4,10 @@ import { APIServiceImpl } from "lib/api/API";
 
 interface UserService {
   api: APIServiceImpl;
-  searchUser: <T>(
+  searchUser: <TData>(
     id?: string,
     config?: AxiosRequestConfig
-  ) => Promise<AxiosResponse<T> | AxiosError | undefined>;
+  ) => Promise<AxiosResponse<TData> | AxiosError | undefined>;
 }
 
 export class UserServiceImpl implements UserService {
@@ -15,8 +15,13 @@ export class UserServiceImpl implements UserService {
   constructor(baseUrl: string) {
     this.api = new APIServiceImpl(baseUrl);
   }
-  searchUser = async <T>(id?: string | undefined) => {
-    const response = await this.api.get<T>(`/users?id=${id}`);
+  searchUser = async <TData>(
+    id?: string | undefined,
+    config?: AxiosRequestConfig
+  ) => {
+    const response = await this.api.get<TData>(`/users?id=${id}`, {
+      ...config
+    });
     return response;
   };
 }
