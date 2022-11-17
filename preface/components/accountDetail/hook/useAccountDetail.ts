@@ -1,22 +1,18 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-
 import { AccountServiceImpl } from "service/AccountService";
 import { queryKeys } from "react-query/constants";
-import { AccountModel } from "model/model";
+import { AccountModel, DashboardModel, UserModel } from "model/model";
 import { CLIENT_BASE_URL } from "lib/constants/constants";
+import { UserServiceImpl } from "service/UserService";
 
-export type UpdateAccountBody = Pick<
-  AccountModel,
-  | "broker_id"
-  | "number"
-  | "name"
-  | "assets"
-  | "payments"
-  | "is_active"
-  | "status"
->;
+import { changeNewAccountDataForDashBoard } from "lib/utils/account/changeNewAccountDataForDashBoard";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+
+export type UpdateAccountBody = AccountModel;
 
 const accountService = new AccountServiceImpl(CLIENT_BASE_URL);
+const userService = new UserServiceImpl(CLIENT_BASE_URL);
 
 export const useGetAccountDetail = (id: number) => {
   return useQuery(
@@ -34,18 +30,73 @@ export const useGetAccountDetail = (id: number) => {
   );
 };
 
-export const useUpdateAccountDetail = (id: number, body: UpdateAccountBody) => {
+export const useGetUser = (id: number) => {
+  return useQuery(
+    ["users", id],
+    async () =>
+      await userService.searchUser<{ users: UserModel }>({ params: { id } }),
+    {
+      select: ({ data: { users } }) => users
+    }
+  );
+};
+
+export const useGetAccountAndUser = (id: number) => {
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [detail, setDetial] = useState<DashboardModel>();
+  const [userId, setUserId] = useState<number>(0);
+  const {
+    data: accounts,
+    isSuccess: isAccountSuccess,
+    isLoading: isAccountLoading
+  } = useGetAccountDetail(id);
+
+  const {
+    data: user,
+    isSuccess: isUserSuccess,
+    isLoading: isUserLoading
+  } = useGetUser(userId);
+
+  useEffect(() => {
+    const isSuccess = [isAccountSuccess, isUserSuccess].every((value) => value);
+    setIsSuccess(isSuccess);
+  }, [isAccountSuccess, isUserSuccess]);
+
+  useEffect(() => {
+    const isLoading = [isAccountLoading, isUserLoading].some((value) => value);
+    setIsLoading(isLoading);
+  }, [isAccountLoading, isUserLoading]);
+
+  useEffect(() => {
+    if (isAccountSuccess) {
+      const [userId] = accounts.map((value) => value.user_id);
+      setUserId(userId);
+    }
+  }, [isAccountSuccess]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      const [newAccountDetail] = changeNewAccountDataForDashBoard(
+        accounts ? accounts : [],
+        [user]
+      );
+      setDetial(newAccountDetail);
+    }
+  }, [isSuccess]);
+
+  return { isSuccess, isLoading, detail };
+};
+
+export const useUpdateAccountDetail = () => {
+  const { push } = useRouter();
   const queryClient = useQueryClient();
 
   return useMutation(
-    async () =>
+    async ({ id, body }: { id: number; body: UpdateAccountBody }) =>
       await accountService.updateAccount<AccountModel, UpdateAccountBody>(
-        body,
-        {
-          params: {
-            id
-          }
-        }
+        id,
+        body
       ),
     {
       onSuccess: () => {

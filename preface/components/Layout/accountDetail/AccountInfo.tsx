@@ -24,7 +24,6 @@ const AccountInfo = ({ newAccountDetail, setIsEdit }: IAccountDetailProps) => {
     payments,
     profit_rate,
     is_profit,
-    is_active,
     is_active_kr,
     created_at,
     updated_at

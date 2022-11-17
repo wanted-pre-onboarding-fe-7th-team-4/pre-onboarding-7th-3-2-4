@@ -1,0 +1,19 @@
+{
+  "name": "pre-onboarding-7th-final",
+  "version": "1.0.0",
+  "description": "> 두둥!",
+  "main": "index.js",
+  "scripts": {
+    "install": "cd preface && npm ci && cd .. && cd server && npm ci"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wanted-pre-onboarding-fe-7th-team-4/pre-onboarding-7th-3-2-4.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wanted-pre-onboarding-fe-7th-team-4/pre-onboarding-7th-3-2-4/issues"
+  },
+  "homepage": "https://github.com/wanted-pre-onboarding-fe-7th-team-4/pre-onboarding-7th-3-2-4#readme"
+}
