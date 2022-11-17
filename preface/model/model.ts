@@ -42,12 +42,29 @@ type AccountStatusObject = typeof AccountStatus;
 export type TAccountStatusKey = keyof AccountStatusObject;
 export type TAccountStatusValue = AccountStatusObject[TAccountStatusKey];
 
-export interface UserModel {
+export interface LoginModel {
   accessToken: string;
   user: {
     email: string;
     id: number;
   };
+}
+
+export interface UserModel {
+  id: number;
+  uuid: string;
+  photo: string;
+  name: string;
+  email: string;
+  age: number;
+  gender_origin: number;
+  birth_date: string;
+  phone_number: string;
+  address: string;
+  detail_address: string;
+  last_login: string;
+  created_at: Date;
+  updated_at: Date;
 }
 
 export interface AccountModel {
