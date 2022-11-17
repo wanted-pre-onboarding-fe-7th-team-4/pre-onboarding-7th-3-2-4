@@ -1,51 +1,20 @@
-import { AxiosRequestConfig } from "axios";
+import { AxiosRequestConfig, AxiosResponse } from "axios";
 import { APIServiceImpl } from "../lib/api/API";
-import { AccountModel } from "../model/model";
-
-// const changeAccountNumberFormat = (account: AccountModel) => {
-//   const format = Brokers[account.broker_id];
-//   const number = account.number;
-//   let result = "";
-//   let index = 0;
-//   for (let i = 0; i < format.length; i++) {
-//     if (format[i] === "-") {
-//       result += "-";
-//     } else if (i < 2 && i > format.length - 3) {
-//       result += number[index];
-//       index++;
-//     } else {
-//       result += "*";
-//     }
-//   }
-//   return result;
-// };
-
-// const accountChangeFormat = (account: AccountModel) => {
-//   return {
-//     ...account,
-//     broker_name: Brokers[account.broker_id],
-//     status_name: AccountStatus[account.status],
-//     number: changeAccountNumberFormat(account)
-//   };
-// };
 
 interface AccountService {
   api: APIServiceImpl;
-  getUserAccounts<TData>(config?: AxiosRequestConfig): Promise<TData | TData[]>;
-  getAccount<TData>(
-    account_id: number,
+  getUserAccounts<TData>(
     config?: AxiosRequestConfig
-  ): Promise<TData>;
+  ): Promise<AxiosResponse<TData>>;
   createAccount<TData, TVarialbe>(
     body: TVarialbe,
     config?: AxiosRequestConfig
-  ): Promise<TData>;
+  ): Promise<AxiosResponse<TData>>;
   updateAccount<TData, TVarialbe>(
-    accountId: number,
     body: TVarialbe,
     config?: AxiosRequestConfig
-  ): Promise<TData>;
-  deleteAccount(accountId: number, config?: AxiosRequestConfig): Promise<void>;
+  ): Promise<AxiosResponse<TData>>;
+  deleteAccount(config?: AxiosRequestConfig): Promise<void>;
 }
 
 export class AccountServiceImpl implements AccountService {
@@ -54,61 +23,40 @@ export class AccountServiceImpl implements AccountService {
     this.api = new APIServiceImpl(baseURL);
   }
 
-  async getUserAccounts<TData>(config?: AxiosRequestConfig): Promise<TData[]> {
-    const response = await this.api.get<TData[]>("accounts", {
+  async getUserAccounts<TData>(
+    config?: AxiosRequestConfig
+  ): Promise<AxiosResponse<TData>> {
+    const response = await this.api.get<TData>("accounts", {
       ...config
     });
 
-    return response.data;
-  }
-
-  async getAccount<TData>(
-    account_id: number,
-    config?: AxiosRequestConfig
-  ): Promise<TData> {
-    const response = await this.api.get<TData>(
-      `accounts
-      /${account_id}`,
-      {
-        ...config
-      }
-    );
-
-    return response.data;
+    return response;
   }
 
   async createAccount<TData, TVariable>(
     body: TVariable,
     config?: AxiosRequestConfig
-  ): Promise<TData> {
+  ): Promise<AxiosResponse<TData>> {
     const response = await this.api.post<TData, TVariable>("accounts", body, {
       ...config
     });
 
-    return response.data;
+    return response;
   }
 
   async updateAccount<TData, TVariable>(
-    accountId: number,
     body: TVariable,
     config?: AxiosRequestConfig
-  ): Promise<TData> {
-    const response = await this.api.put<TData, TVariable>(
-      `account/${accountId}`,
-      body,
-      {
-        ...config
-      }
-    );
+  ): Promise<AxiosResponse<TData>> {
+    const response = await this.api.put<TData, TVariable>(`account`, body, {
+      ...config
+    });
 
-    return response.data;
+    return response;
   }
 
-  async deleteAccount(
-    accountId: number,
-    config?: AxiosRequestConfig
-  ): Promise<void> {
-    await this.api.delete(`account/${accountId}`, {
+  async deleteAccount(config?: AxiosRequestConfig): Promise<void> {
+    await this.api.delete(`account`, {
       ...config
     });
   }
