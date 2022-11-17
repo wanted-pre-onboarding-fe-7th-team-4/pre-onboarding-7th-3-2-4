@@ -29,9 +29,9 @@ export const getFormattedAccountData = (
       return {
         id: id.toString(),
         uuid,
-        user_id: users?.find(({ id }) => id === user_id)?.name || "", // 사용자 이름
+        user_id: users?.find(({ id }) => id === user_id)?.name || "",
         broker_id: changeToBrokerName(broker_id),
-        number: maskAccountNumber(number), // 링크 정보(계좌 id)
+        number: maskAccountNumber(number),
         name: getAccountName(name),
         status: getAccountStatus(status),
         assets:
