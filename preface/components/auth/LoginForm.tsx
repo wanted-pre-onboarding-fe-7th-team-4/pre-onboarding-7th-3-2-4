@@ -6,10 +6,7 @@ import useLoginInput from "./hook/useLoginInput";
 import { AuthServiceImpl } from "service/AuthService";
 import { CLIENT_BASE_URL } from "../../lib/constants/constants";
 
-const authService = new AuthServiceImpl<{
-  email: string;
-  password: string;
-}>(CLIENT_BASE_URL);
+const authService = new AuthServiceImpl(CLIENT_BASE_URL);
 
 const LoginForm = () => {
   //   const router = useRouter();

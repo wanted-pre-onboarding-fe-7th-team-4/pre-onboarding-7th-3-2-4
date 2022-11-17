@@ -64,3 +64,8 @@ export interface AccountModel {
   created_at: Date;
   updated_at: Date;
 }
+
+export interface ILoginData {
+  email: string;
+  password: string;
+}
