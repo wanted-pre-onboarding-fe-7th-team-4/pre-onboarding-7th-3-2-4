@@ -1,21 +1,14 @@
 import axios, { AxiosError } from "axios";
 import type { NextApiRequest, NextApiResponse } from "next";
 
-interface UserModel {
-  accessToken: string;
-  user: {
-    email: string;
-    id: number;
-  };
-}
-
 export default async function loginHandler(
   req: NextApiRequest,
   res: NextApiResponse<{ isLogin: boolean }>
 ) {
   try {
     const {
-      body: { email, password }
+      body: { email, password },
+      method
     } = req;
 
     const response = await axios.post<UserModel>(
