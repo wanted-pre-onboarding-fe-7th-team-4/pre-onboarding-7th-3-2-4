@@ -1,6 +1,7 @@
 import axios, { AxiosError } from "axios";
 import { UserModel } from "model/model";
 import type { NextApiRequest, NextApiResponse } from "next";
+import CookieService from "service/CookieService";
 
 export default async function loginHandler(
   req: NextApiRequest,
@@ -22,6 +23,12 @@ export default async function loginHandler(
           }
         );
         const { accessToken, user } = response.data;
+        const cookies = { accessToken, user };
+        CookieService.setCookie(JSON.stringify(cookies), {
+          req,
+          res,
+          maxAge: 3600
+        });
         return res.status(200).json({ isLogin: true });
       }
     }
