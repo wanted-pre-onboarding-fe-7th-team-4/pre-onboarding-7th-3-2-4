@@ -86,11 +86,6 @@ export const BrokerFormat = {
 
 export type BrokerFormat = typeof BrokerFormat[keyof typeof BrokerFormat];
 
-type CreateAccountBody = Pick<
-  Account,
-  "user_id" | "broker_id" | "number" | "name" | "assets" | "payments"
->;
-
 const changeAccountNumberFormat = (account: Account) => {
   const format = BrokerFormat[account.broker_id];
   const number = account.number;
@@ -118,25 +113,43 @@ const accountChangeFormat = (account: Account) => {
   };
 };
 
+type CreateAccountBody = Pick<
+  Account,
+  "user_id" | "broker_id" | "number" | "name" | "assets" | "payments"
+>;
+
+type UpdateAccountBody = Pick<
+  Account,
+  | "id"
+  | "broker_id"
+  | "number"
+  | "name"
+  | "assets"
+  | "payments"
+  | "is_active"
+  | "status"
+>;
 interface AccountService {
   api: APIServiceImpl;
-  getUserAccounts(id: number, page: number, limit: number): Promise<Account[]>;
-  getSearchAccounts(
-    id: number,
-    page: number,
-    limit: number,
-    query: string
+  getUserAccounts(
+    endpoint: string,
+    config?: AxiosRequestConfig
   ): Promise<Account[]>;
-  getAccount(id: number, account_id: number): Promise<Account>;
+  // getSearchAccounts(
+  //   endpoint: string,
+  // ): Promise<Account[]>;
+  // getAccount(id: number, account_id: number): Promise<Account>;
   createAccount(
-    { user_id, broker_id, number, name, assets, payments }: Account,
-    token: string
+    endpoint: string,
+    body: CreateAccountBody,
+    config?: AxiosRequestConfig
   ): Promise<Account>;
   updateAccount(
-    { id, user_id, broker_id, number, name, assets, payments }: Account,
-    token: string
+    endpoint: string,
+    body: UpdateAccountBody,
+    config?: AxiosRequestConfig
   ): Promise<Account>;
-  deleteAccount(id: number, token: string): Promise<void>;
+  deleteAccount(endpoint: string, config?: AxiosRequestConfig): Promise<void>;
 }
 
 export class AccountServiceImpl implements AccountService {
@@ -146,56 +159,43 @@ export class AccountServiceImpl implements AccountService {
   }
 
   async getUserAccounts(
-    id: number,
-    page: number,
-    limit: number
+    endpoint: string,
+    config?: AxiosRequestConfig
   ): Promise<Account[]> {
-    const response = await this.api.get<Account[]>(
-      `accounts?user_id=${id}&page=${page}&limit=${limit}`
-    );
+    const response = await this.api.get<Account[]>(endpoint, {
+      ...config
+    });
 
     return response.data.map(accountChangeFormat);
   }
 
-  async getSearchAccounts(
-    id: number,
-    page: number,
-    limit: number,
-    query: string
-  ): Promise<Account[]> {
-    const response = await this.api.get<Account[]>(
-      `accounts?user_id=${id}&page=${page}&limit=${limit}&q=${query}`
-    );
+  // async getSearchAccounts(
+  //   endpoint: string,
+  // ): Promise<Account[]> {
+  //   const response = await this.api.get<Account[]>(
+  //     endpoint
+  //   );
 
-    return response.data.map(accountChangeFormat);
-  }
+  //   return response.data.map(accountChangeFormat);
+  // }
 
-  async getAccount(account_id: number): Promise<Account> {
-    const response = await this.api.get<Account>(
-      `accounts
-      ?id=${account_id}`
-    );
+  // async getAccount(account_id: number): Promise<Account> {
+  //   const response = await this.api.get<Account>(
+  //     `accounts
+  //     ?id=${account_id}`
+  //   );
 
-    return accountChangeFormat(response.data);
-  }
+  //   return accountChangeFormat(response.data);
+  // }
 
   async createAccount(
-    { user_id, broker_id, number, name, assets, payments }: Account,
-    token: string,
+    endpoint: string,
+    body: CreateAccountBody,
     config?: AxiosRequestConfig
   ): Promise<Account> {
-    //! FIXME token으로 인증된 유저만 가능하도록 변경
-    console.info(token);
     const response = await this.api.post<Account, CreateAccountBody>(
-      "accounts",
-      {
-        user_id,
-        broker_id,
-        number,
-        name,
-        assets,
-        payments
-      },
+      endpoint,
+      body,
       { ...config }
     );
 
@@ -203,39 +203,25 @@ export class AccountServiceImpl implements AccountService {
   }
 
   async updateAccount(
-    { id, user_id, broker_id, number, name, assets, payments }: Account,
-    token: string,
+    endpoint: string,
+    body: UpdateAccountBody,
     config?: AxiosRequestConfig
   ): Promise<Account> {
-    //! FIXME token으로 인증된 유저만 가능하도록 변경
-    //! uuid 적용하도록 변경
-    //! FIXME id로 찾아서 수정하도록 변경
-    console.info(token);
-    const response = await this.api.put<Account>(
-      `accounts/${id}`,
-      {
-        user_id,
-        broker_id,
-        number,
-        name,
-        assets,
-        payments,
-        status: 2,
-        updated_at: new Date(),
-        created_at: new Date(),
-        id,
-        is_active: true,
-        uuid: "uuid"
-      },
+    const response = await this.api.put<Account, UpdateAccountBody>(
+      endpoint,
+      body,
       { ...config }
     );
 
     return response.data;
   }
 
-  async deleteAccount(id: number, token: string): Promise<void> {
-    //! FIXME token으로 인증된 유저만 가능하도록 변경
-    console.info(token);
-    await this.api.delete(`accounts/${id}`);
+  async deleteAccount(
+    endpoint: string,
+    config?: AxiosRequestConfig
+  ): Promise<void> {
+    await this.api.delete(endpoint, {
+      ...config
+    });
   }
 }

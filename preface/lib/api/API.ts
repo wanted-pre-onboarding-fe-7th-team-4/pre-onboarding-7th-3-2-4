@@ -30,7 +30,7 @@ export class APIServiceImpl extends HttpClientImpl implements APIService {
     return this.instance.post<T>(endPoint, data, config);
   };
 
-  put = <T>(endPoint: string, data: T, config?: AxiosRequestConfig) => {
+  put = <T, B>(endPoint: string, data: B, config?: AxiosRequestConfig) => {
     return this.instance.put<T>(endPoint, data, config);
   };
 
