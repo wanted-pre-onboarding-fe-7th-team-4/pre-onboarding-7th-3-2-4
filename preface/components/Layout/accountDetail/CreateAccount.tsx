@@ -4,7 +4,6 @@ import { AccountStatus } from "lib/utils/account/getAccountStatus";
 import { useCreateAccount } from "components/auth/hook/useCreateAccount";
 import { AccountModel } from "model/model";
 
-// TODO: Form validation
 const CreateAccount = () => {
   const onCreate = useCreateAccount();
   const [accountValue, setAccountValue] = useState<
@@ -22,9 +21,7 @@ const CreateAccount = () => {
     updated_at: new Date()
   });
 
-  // FIXME: 버튼 작동 고치기 VALIDATION
   const disable =
-    // accountValue.user_id === "" ||
     accountValue.name === "" ||
     accountValue.number === "" ||
     accountValue.assets === "" ||

@@ -11,8 +11,7 @@ import { useRouter } from "next/router";
 import { generateQueryString } from "lib/utils/generateQueryString";
 
 const AccountPage: NextPageWithLayout = () => {
-  const { accounts, totalPage, refetch, limit, cur_page, query } =
-    useAccounts();
+  const { accounts, totalPage, query } = useAccounts();
   const [page, setPage] = useState<number>();
   const router = useRouter();
 
@@ -67,10 +66,10 @@ const Container = styled.div`
   td {
     border-collapse: collapse;
     border: 1px solid #f0f0f0;
-    text-align: center;
+    /* text-align: center; */
     vertical-align: middle;
     height: 2.5rem;
-    /* padding-right: 1rem; */
+    padding-right: 1rem;
     .positive {
       color: red;
     }
@@ -80,11 +79,8 @@ const Container = styled.div`
   }
 `;
 export function getServerSideProps({ query }: any) {
-  // if query object was received, return it as a router prop:
   if (query._p) {
     return { props: { router: { query } } };
   }
-  // obtain candidateId elsewhere, redirect or fallback to some default value:
-  /* ... */
   return { props: { router: { query: { candidateId: 8432 } } } };
 }

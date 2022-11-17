@@ -1,5 +1,3 @@
-// import { Brokers } from "lib/utils/account/changeToBrokerName";
-// import { AccountStatus } from "lib/utils/account/getAccountStatus";
 import { TAccountStatusKey, TBrokersKey } from "model/model";
 
 interface AccountsQuery {

@@ -1,7 +1,6 @@
 import React from "react";
 import Content from "./Content";
-import Footer from "./Footer";
-// import Footer from "./Footer";
+
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 
@@ -17,7 +16,11 @@ const Layout = ({ title, children }: Props) => {
       <div className={"w-full"}>
         <Header title={title} />
         <Content>{children}</Content>
-        <Footer />
+        <footer>
+          <p className="w-full flex justify-center items-center h-16 bg-myGray text-slate-400 text-sm">
+            Copyright @ December and Company Inc.
+          </p>
+        </footer>
       </div>
     </div>
   );

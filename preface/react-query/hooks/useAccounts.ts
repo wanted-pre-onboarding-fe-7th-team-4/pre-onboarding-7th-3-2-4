@@ -47,7 +47,7 @@ export const getPageAccounts = async (
 export const useAccounts = () => {
   const { query } = useRouter();
 
-  const { data, refetch, isLoading } = useQuery(
+  const { data } = useQuery(
     [queryKeys.accounts, query],
     () => getPageAccounts({ _limit: LIMIT, ...query }),
     {
@@ -58,11 +58,9 @@ export const useAccounts = () => {
 
   return {
     query,
-    isLoading,
     limit: LIMIT,
     cur_page: data?.cur_page,
     accounts: getFormattedAccountData(data?.data || []),
-    totalPage: Math.ceil((data?.totalItems || 0) / LIMIT),
-    refetch
+    totalPage: Math.ceil((data?.totalItems || 0) / LIMIT)
   };
 };

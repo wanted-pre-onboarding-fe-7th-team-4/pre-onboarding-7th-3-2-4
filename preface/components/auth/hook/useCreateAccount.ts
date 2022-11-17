@@ -16,9 +16,7 @@ export const useCreateAccount = () => {
     onSuccess: () => {
       queryClient.invalidateQueries([queryKeys.accounts]);
       alert("새 계좌가 생성되었습니다");
-      // MODAL 창 닫기
     },
-    // TODO: ERROR 처리 전역으로 한번에
     onError: (err: unknown) => {
       if (err instanceof Error) {
         alert(err.message);
