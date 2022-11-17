@@ -1,3 +1,4 @@
+import { AxiosRequestConfig } from "axios";
 import { APIServiceImpl } from "../lib/api/API";
 
 export interface Account {
@@ -85,6 +86,11 @@ export const BrokerFormat = {
 
 export type BrokerFormat = typeof BrokerFormat[keyof typeof BrokerFormat];
 
+type CreateAccountBody = Pick<
+  Account,
+  "user_id" | "broker_id" | "number" | "name" | "assets" | "payments"
+>;
+
 const changeAccountNumberFormat = (account: Account) => {
   const format = BrokerFormat[account.broker_id];
   const number = account.number;
@@ -114,7 +120,23 @@ const accountChangeFormat = (account: Account) => {
 
 interface AccountService {
   api: APIServiceImpl;
-  getUserAccounts(id: number): Promise<Account[]>;
+  getUserAccounts(id: number, page: number, limit: number): Promise<Account[]>;
+  getSearchAccounts(
+    id: number,
+    page: number,
+    limit: number,
+    query: string
+  ): Promise<Account[]>;
+  getAccount(id: number, account_id: number): Promise<Account>;
+  createAccount(
+    { user_id, broker_id, number, name, assets, payments }: Account,
+    token: string
+  ): Promise<Account>;
+  updateAccount(
+    { id, user_id, broker_id, number, name, assets, payments }: Account,
+    token: string
+  ): Promise<Account>;
+  deleteAccount(id: number, token: string): Promise<void>;
 }
 
 export class AccountServiceImpl implements AccountService {
@@ -123,13 +145,96 @@ export class AccountServiceImpl implements AccountService {
     this.api = new APIServiceImpl();
   }
 
-  async getUserAccounts(id: number): Promise<Account[]> {
-    const response = await this.api.get<Account[]>("/accounts");
+  async getUserAccounts(
+    id: number,
+    page: number,
+    limit: number
+  ): Promise<Account[]> {
+    const response = await this.api.get<Account[]>(
+      `accounts?user_id=${id}&page=${page}&limit=${limit}`
+    );
 
     return response.data.map(accountChangeFormat);
   }
 
-  // getAccountDetail(id: number): Promise<Account> {
-  //   return this.api.get(`/accounts/${id}`);
-  // }
+  async getSearchAccounts(
+    id: number,
+    page: number,
+    limit: number,
+    query: string
+  ): Promise<Account[]> {
+    const response = await this.api.get<Account[]>(
+      `accounts?user_id=${id}&page=${page}&limit=${limit}&q=${query}`
+    );
+
+    return response.data.map(accountChangeFormat);
+  }
+
+  async getAccount(account_id: number): Promise<Account> {
+    const response = await this.api.get<Account>(
+      `accounts
+      ?id=${account_id}`
+    );
+
+    return accountChangeFormat(response.data);
+  }
+
+  async createAccount(
+    { user_id, broker_id, number, name, assets, payments }: Account,
+    token: string,
+    config?: AxiosRequestConfig
+  ): Promise<Account> {
+    //! FIXME token으로 인증된 유저만 가능하도록 변경
+    console.info(token);
+    const response = await this.api.post<Account, CreateAccountBody>(
+      "accounts",
+      {
+        user_id,
+        broker_id,
+        number,
+        name,
+        assets,
+        payments
+      },
+      { ...config }
+    );
+
+    return response.data;
+  }
+
+  async updateAccount(
+    { id, user_id, broker_id, number, name, assets, payments }: Account,
+    token: string,
+    config?: AxiosRequestConfig
+  ): Promise<Account> {
+    //! FIXME token으로 인증된 유저만 가능하도록 변경
+    //! uuid 적용하도록 변경
+    console.info(token);
+    const response = await this.api.put<Account>(
+      `accounts/${id}`,
+      {
+        user_id,
+        broker_id,
+        number,
+        name,
+        assets,
+        payments,
+        status: 2,
+        updated_at: new Date(),
+        created_at: new Date(),
+        id,
+        is_active: true,
+        uuid: "uuid"
+      },
+      { ...config }
+    );
+
+    return response.data;
+  }
+
+  async deleteAccount(id: number, token: string): Promise<void> {
+    //! FIXME token으로 인증된 유저만 가능하도록 변경
+    console.info(token);
+    await this.api.delete(`accounts/${id}`);
+  }
 }
