@@ -68,9 +68,16 @@ const Container = styled.div`
   td {
     border-collapse: collapse;
     border: 1px solid #f0f0f0;
-    /* text-align: right; */
+    /* text-align: center; */
+    vertical-align: middle;
     height: 2.5rem;
     padding-right: 1rem;
+    .positive {
+      color: red;
+    }
+    .negative {
+      color: blue;
+    }
   }
 `;
 export function getServerSideProps({ query }: any) {

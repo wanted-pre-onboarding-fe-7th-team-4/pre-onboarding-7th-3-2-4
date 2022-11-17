@@ -16,8 +16,8 @@ const Sidebar = () => {
     authApi.logout().then(() => Router.replace("/"));
   };
   return (
-    <div className="min-h-screen bg-primary1 text-white ">
-      <h1 className="w-full flex justify-evenly items-center text-4xl my-5 mx-auto font-bold">
+    <div className="h-screen bg-myDarkBlue text-white ">
+      <h1 className="w-full flex justify-evenly items-center text-5xl my-5 mx-auto font-bold">
         <Image
           src={Logo}
           alt="PREFACE Logo"
