@@ -1,20 +1,18 @@
 import { APIServiceImpl } from "../lib/api/API";
 interface AuthService<T> {
   api: APIServiceImpl;
-  login(data: T): void;
+  login(endPoint: string, data: T): void;
   logout(): void;
 }
 
 export class AuthServiceImpl<T> implements AuthService<T> {
   api;
-  constructor() {
-    this.api = new APIServiceImpl();
+  constructor(baseUrl: string) {
+    this.api = new APIServiceImpl(baseUrl);
   }
 
-  login(data: T): void {
-    this.api.post("/login", data);
-    // setTimeout(this.logout, 1000 * 60 * 60);
-    // return error?
+  login(endPoint: string, data: T): void {
+    this.api.post(endPoint, data);
   }
 
   logout(): void {
