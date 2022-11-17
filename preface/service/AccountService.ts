@@ -51,7 +51,8 @@ interface AccountService {
   getUserAccounts(
     endpoint: string,
     config?: AxiosRequestConfig
-  ): Promise<AccountModel[]>;
+    // ): Promise<AccountModel[]>;
+  ): Promise<ResponseModel>;
   // getSearchAccounts(
   //   endpoint: string,
   // ): Promise<Account[]>;
@@ -69,6 +70,11 @@ interface AccountService {
   deleteAccount(endpoint: string, config?: AxiosRequestConfig): Promise<void>;
 }
 
+interface ResponseModel {
+  accounts: AccountModel[];
+  totalItems: number;
+}
+
 export class AccountServiceImpl implements AccountService {
   api;
   constructor(baseURL: string) {
@@ -78,8 +84,10 @@ export class AccountServiceImpl implements AccountService {
   async getUserAccounts(
     endpoint: string,
     config?: AxiosRequestConfig
-  ): Promise<AccountModel[]> {
-    const response = await this.api.get<AccountModel[]>(endpoint, {
+    // ): Promise<AccountModel[]> {
+  ): Promise<ResponseModel> {
+    // const response = await this.api.get<AccountModel[]>(endpoint, {
+    const response = await this.api.get<ResponseModel>(endpoint, {
       ...config
     });
 

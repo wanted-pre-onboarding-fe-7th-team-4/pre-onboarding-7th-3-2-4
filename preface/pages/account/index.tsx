@@ -4,8 +4,11 @@ import type { NextPageWithLayout } from "pages/_app";
 import Layout from "components/Layout/dashboard/Layout";
 import styled from "styled-components";
 import { accountTableColumns } from "lib/data/accountTableColumns";
+import { useAccounts } from "react-qeury/hooks/useAccounts";
 
 const AccountPage: NextPageWithLayout = () => {
+  const { data } = useAccounts();
+  console.log(data);
   return (
     <Container className="flex w-full">
       <table className="bg-white font-normal text-sm">
