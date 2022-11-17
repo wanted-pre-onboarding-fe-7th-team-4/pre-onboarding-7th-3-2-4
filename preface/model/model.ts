@@ -91,3 +91,24 @@ export interface ILoginData {
   email: string;
   password: string;
 }
+
+export interface DashboardModel {
+  id?: number;
+  uuid?: string;
+  user_name?: string;
+  user_id?: number;
+  broker_id?: TBrokersKey;
+  broker_name?: string;
+  status?: TAccountStatusKey;
+  status_kr?: string;
+  number?: string;
+  name?: string;
+  assets?: string;
+  payments?: string;
+  profit_rate?: string;
+  is_profit?: boolean | null;
+  is_active?: boolean;
+  is_active_kr?: string;
+  created_at?: string;
+  updated_at?: string;
+}
