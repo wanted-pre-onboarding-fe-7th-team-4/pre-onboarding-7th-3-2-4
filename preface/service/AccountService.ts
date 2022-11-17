@@ -17,11 +17,6 @@ interface AccountService {
   deleteAccount(config?: AxiosRequestConfig): Promise<void>;
 }
 
-// interface ResponseModel {
-//   accounts: AccountModel[];
-//   totalItems: number;
-// }
-
 export class AccountServiceImpl implements AccountService {
   api;
   constructor(baseURL: string) {
