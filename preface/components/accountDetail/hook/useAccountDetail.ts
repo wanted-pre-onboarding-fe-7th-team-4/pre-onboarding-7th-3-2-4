@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { AccountServiceImpl } from "service/AccountService";
-import { queryKeys } from "lib/react-query/constants";
+import { queryKeys } from "react-query/constants";
 import { AccountModel } from "model/model";
 import { CLIENT_BASE_URL } from "lib/constants/constants";
 
