@@ -7,12 +7,8 @@ import { getMoney } from "./getMoney";
 import { getDate } from "./getDate";
 
 export const getAccountData = (accounts: AccountModel[], users) => {
-  
-
- 
   const newAccounts = accounts.map(
     ({
-
       uuid,
       user_id,
       broker_id,
@@ -26,7 +22,7 @@ export const getAccountData = (accounts: AccountModel[], users) => {
     }) => {
       return {
         uuid,
-        user_id: sf,
+        user_id,
         broker_id: changeToBrokerName(broker_id),
         number: maskAccountNumber(number),
         name: getAccountName(name),

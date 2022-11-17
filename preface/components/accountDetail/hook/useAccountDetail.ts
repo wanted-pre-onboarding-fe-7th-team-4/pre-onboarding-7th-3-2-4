@@ -7,7 +7,6 @@ import { UserServiceImpl } from "service/UserService";
 
 import { changeNewAccountDataForDashBoard } from "lib/utils/account/changeNewAccountDataForDashBoard";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 
 export type UpdateAccountBody = AccountModel;
 
@@ -89,7 +88,6 @@ export const useGetAccountAndUser = (id: number) => {
 };
 
 export const useUpdateAccountDetail = () => {
-  const { push } = useRouter();
   const queryClient = useQueryClient();
 
   return useMutation(
