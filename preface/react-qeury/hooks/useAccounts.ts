@@ -1,8 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
+import { accountApi } from "lib/api/instance";
+import { getAccountData } from "lib/utils/getFormattedAccountData";
 import { AccountModel, TAccountStatusKey, TBrokersKey } from "model/model";
 import { useRouter } from "next/router";
 import { queryKeys } from "react-qeury/constants";
-import { AccountServiceImpl } from "service/AccountService";
 
 const LIMIT = 20;
 
@@ -30,13 +31,16 @@ export interface AccountsPage extends AccountResponseData {
   cur_page: number;
 }
 
-const api = new AccountServiceImpl("http://localhost:3000/api/accounts");
+interface ResponseModel {
+  accounts: AccountModel[];
+  totalItems: number;
+}
 
 export const getPageAccounts = async (
   params: PageAccountsQuery
 ): Promise<AccountsPage> => {
   try {
-    const data = await api.getUserAccounts("", {
+    const { data } = await accountApi.getUserAccounts<ResponseModel>({
       params,
       withCredentials: true
     });
@@ -65,6 +69,7 @@ export const getPageAccounts = async (
 
 export const useAccounts = () => {
   const { query } = useRouter();
+  // console.log({ query });
 
   const { data, refetch } = useQuery(
     [queryKeys.accounts, query],
@@ -74,5 +79,6 @@ export const useAccounts = () => {
       retryDelay: 3000
     }
   );
-  return { data, refetch };
+
+  return { accounts: getAccountData(data?.data || []), refetch };
 };

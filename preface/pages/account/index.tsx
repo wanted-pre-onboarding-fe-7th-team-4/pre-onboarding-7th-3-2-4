@@ -3,30 +3,19 @@ import type { NextPageWithLayout } from "pages/_app";
 
 import Layout from "components/Layout/dashboard/Layout";
 import styled from "styled-components";
-import { accountTableColumns } from "lib/data/accountTableColumns";
 import { useAccounts } from "react-qeury/hooks/useAccounts";
+import AccountFilter from "components/account/AccountFilter";
+import AccountListTable from "components/account/AccountListTable";
+import Pagination from "components/account/Pagination";
 
 const AccountPage: NextPageWithLayout = () => {
-  const { data } = useAccounts();
-  console.log(data);
+  const { accounts } = useAccounts();
+
   return (
-    <Container className="flex w-full">
-      <table className="bg-white font-normal text-sm">
-        <thead className="bg-myBeige">
-          <tr>
-            {accountTableColumns.map((it) => (
-              <th key={it.key}>{it.name}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {/* // TODO: 고객명, 계좌번호, 컴포넌트 분리 */}
-          <tr>
-            {/* TODO: 맵 돌려서 출력 */}
-            <td>a</td>
-          </tr>
-        </tbody>
-      </table>
+    <Container className="w-full">
+      <AccountFilter />
+      <AccountListTable accountsData={accounts} />
+      <Pagination />
     </Container>
   );
 };
