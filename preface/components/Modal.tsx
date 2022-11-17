@@ -9,13 +9,11 @@ interface IProps {
 const Modal = (props: IProps) => {
   const modalDiv = document.querySelector("#_modal");
   useEffect(() => {
-    // modal이 떠 있을 땐 스크롤 막음
     document.body.style.cssText = `
     position: fixed; 
     top: -${window.scrollY}px;
     overflow-y: scroll;
     width: 100%;`;
-    // modal 닫히면 현재 스크롤 위치로 이동
     return () => {
       const scrollY = document.body.style.top;
       document.body.style.cssText = "";
