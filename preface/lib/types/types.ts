@@ -6,4 +6,19 @@ export interface Queries {
   _order?: string | string[];
 }
 
+export type AccountType = {
+  id?: string;
+  user_id: string;
+  uuid?: string;
+  broker_id: string;
+  status: string;
+  number: string;
+  name: string;
+  assets: string;
+  payments: string;
+  is_active: string;
+  created_at: Date;
+  updated_at: Date;
+};
+
 export type QueryKeys = keyof Queries;

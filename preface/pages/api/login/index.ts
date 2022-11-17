@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios";
-import { UserModel } from "model/model";
+import { LoginModel } from "model/model";
 import type { NextApiRequest, NextApiResponse } from "next";
 import CookieService from "service/CookieService";
 
@@ -15,7 +15,7 @@ export default async function loginHandler(
 
     switch (method) {
       case "POST": {
-        const response = await axios.post<UserModel>(
+        const response = await axios.post<LoginModel>(
           "http://localhost:4000/login",
           {
             email,
