@@ -2,16 +2,16 @@
 
 > 두둥!
 
-| 이름      | Git                                                                      |
-| --------- | ------------------------------------------------------------------------ |
-| 👑 임거정 | https://github.com/rieulp/pre-onboarding-7th-3-2/tree/dev                |
-| 박라영    | https://github.com/rieulp/pre-onboarding-7th-3-2/tree/dev                |
-| 고현수    | https://github.com/movie42/pre-onboarding-7th-3-2-4                      |
-| 김하영    | https://github.com/seul-dev/pre-onboarding-7th-3-2-4                     |
-| 박호준    | https://github.com/seul-dev/pre-onboarding-7th-3-2-4                     |
-| 이슬      | https://github.com/seul-dev/pre-onboarding-7th-3-2-4                     |
-| 조윤정    | https://github.com/yunjjeongjo/pre-onboarding-7th-3-2-4                  |
-| 최지영    | https://github.com/ohtmm/pre-onboarding-7th-3-2_investment-service-admin |
+| 이름      | Git                                                                                                                   |
+| --------- | --------------------------------------------------------------------------------------------------------------------- |
+| 👑 임거정 | https://github.com/rieulp/pre-onboarding-7th-3-2/tree/dev                                                             |
+| 박라영    | https://github.com/rieulp/pre-onboarding-7th-3-2/tree/dev                                                             |
+| 고현수    | https://github.com/movie42/pre-onboarding-7th-3-2-4                                                                   |
+| 김하영    | https://github.com/seul-dev/pre-onboarding-7th-3-2-4                                                                  |
+| 박호준    | https://github.com/ganeodolu/wanted-pre-onboarding-course/tree/main/pre-onboarding-7th-3-2-4-investment-administrator |
+| 이슬      | https://github.com/seul-dev/pre-onboarding-7th-3-2-4                                                                  |
+| 조윤정    | https://github.com/yunjjeongjo/pre-onboarding-7th-3-2-4                                                               |
+| 최지영    | https://github.com/ohtmm/pre-onboarding-7th-3-2_investment-service-admin                                              |
 
 # 환경 설정 및 실행 방법
 
@@ -105,12 +105,10 @@ npm run dev
 - NextJS Client 서버를 사용해서 CORS 문제를 해결하였습니다. CORS는 브라우저에서 일어나는 문제이기 때문에 NEXTJS 클라이언트 서버를 프록시 서버로 사용하여 CORS를 해결하였습니다.
 - 넘어오는 accessToken을 Cookie에 저장하여 사용했습니다. API 서버에서 검증을 하여 COOKIE가 없을 경우 login으로 redirect하기 때문에 클라이언트에서 인가 구현을 하지 않아도 된다는 장점이 있었습니다.
 
-## 2. 계좌 목록 - 필터링, 페이지네이션, 검색 구현 (추후 입력)
+## 2. 계좌 목록 - 필터링, 페이지네이션, 검색 구현
 
-\*상상으로 적었습니다. 수정 부탁드립니다.
-
-- 필터링은 URL을 상태로 사용하여 구현하였습니다. 새로고침을 하여도 브라우저의 URL은 그대로 남아있기 때문에 필터링 값이 그대로 유지될 수 있습니다.
-- 페이지네이션은 응답 헤더에 'x-totla-count'값을 사용해서 페이지를 구현했습니다.
+- 필터링은 URL의 쿼리스트링을 상태로 사용하여 구현하였습니다. 새로고침을 하여도 브라우저의 URL은 그대로 남아있기 때문에 필터링 값이 그대로 유지될 수 있습니다.
+- 페이지네이션은 응답 헤더에 'x-total-count'값을 사용해서 페이지수를 계산해 구현했습니다.
 
 ## 3. 계좌 상세 - 생성, 수정 구현
 
@@ -140,7 +138,7 @@ npm run dev
   }
 
   async () => {
-    await userService.searchUser<{ users: UserModel }>({ params: { id } }),
+    await userService.searchUser<{ users: UserModel[] }>({ params: { id } }),
   }
 ```
 
