@@ -5,16 +5,18 @@ function AccountFilter() {
   return (
     <AccountFilterContainer className="bg-white font-normal text-sm">
       <form
-      //   onSubmit={onSubmit} onChange={onChange}
+        onSubmit={() => {
+          console.log("change");
+        }}
       >
         <div className="item">
           <label>증권사</label>
           <select
             name="broker_id"
-            value="임시"
+            defaultValue="임시"
             //   value={broker}
           >
-            <option selected>선택</option>
+            <option defaultValue={1}>선택</option>
             {/* {Object.keys(brokersData).map((key, i) => (
               <option key={i} value={key}>
                 {brokersData[key as Broker]}
@@ -26,10 +28,10 @@ function AccountFilter() {
           <label>계좌활성여부</label>
           <select
             name="is_active"
-            value="임시"
+            defaultValue="임시"
             //   value={isActive ?? undefined}
           >
-            <option selected>선택</option>
+            <option defaultValue={1}>선택</option>
             <option value={1}>활성</option>
             <option value={0}>비활성</option>
           </select>
@@ -38,10 +40,10 @@ function AccountFilter() {
           <label>계좌상태</label>
           <select
             name="status"
-            value="임시"
+            defaultValue="임시"
             //   value={status}
           >
-            <option selected>선택</option>
+            <option defaultValue={1}>선택</option>
             {/* {Object.keys(accountStatusData).map((key, i) => (
               <option key={i} value={key}>
                 {accountStatusData[key as AccountStatus]}
@@ -53,6 +55,7 @@ function AccountFilter() {
           <label>계좌명</label>
           <input
             name="q"
+            defaultValue="임시"
             //   value={search} onChange={onChangeSearch}
           />
           <button type="submit" className="searchButton">

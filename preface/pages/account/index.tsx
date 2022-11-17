@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import type { NextPageWithLayout } from "pages/_app";
 
 import Layout from "components/Layout/dashboard/Layout";
@@ -12,34 +12,45 @@ import { Queries } from "lib/types/types";
 import { generateQueryString } from "lib/utils/generateQueryString";
 
 const AccountPage: NextPageWithLayout = () => {
+  const [showChild, setShowChild] = useState(false);
   const { accounts, totalPage, refetch, limit, cur_page, isLoading } =
     useAccounts();
 
   const [page, setPage] = useState(1);
   const [query, setQuery] = useState<Queries>({ _limit: 20 });
   const router = useRouter();
+  useEffect(() => {
+    setShowChild(true);
+  }, []);
 
-  return (
-    <Container className="w-full">
-      <AccountFilter />
-      <AccountListTable accountsData={accounts} />
-      <Pagination
-        page={page}
-        setPage={(page) => {
-          setPage(page);
+  if (!showChild) {
+    return null;
+  }
 
-          router.push(
-            "/account" + generateQueryString({ ...query, _page: page })
-          );
+  if (typeof window === "undefined") {
+    return <></>;
+  } else {
+    return (
+      <Container className="w-full">
+        <AccountFilter />
+        <AccountListTable accountsData={accounts} />
+        <Pagination
+          page={page}
+          setPage={(page) => {
+            setPage(page);
 
-          // 주소 바꾸기
-        }}
-        maxPage={totalPage}
-      />
-    </Container>
-  );
+            router.push(
+              "/account" + generateQueryString({ ...query, _page: page })
+            );
+
+            // 주소 바꾸기
+          }}
+          maxPage={totalPage}
+        />
+      </Container>
+    );
+  }
 };
-
 AccountPage.getLayout = (page) => <Layout title="투자계좌">{page}</Layout>;
 
 export default AccountPage;
