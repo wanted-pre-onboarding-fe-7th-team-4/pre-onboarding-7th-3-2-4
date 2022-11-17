@@ -28,18 +28,19 @@ export default async function accountsByIdHandler(
       case "PUT": {
         const { body } = req;
         const { id } = query;
+
         const response = await accountsService.updateAccount<
           AccountModel,
           AccountModel
-        >(body, { params: { id } });
-        res.status(200).json({ account: response.data, isSuccess: true });
-        break;
+        >(Number(id), body);
+        return res
+          .status(200)
+          .json({ account: response.data, isSuccess: true });
       }
       case "DELETE": {
         const { id } = query;
         await accountsService.deleteAccount({ params: { id } });
-        res.status(200).json({ isSuccess: true });
-        break;
+        return res.status(200).json({ isSuccess: true });
       }
       default:
         res.setHeader("Allow", ["GET", "PUT", "DELETE"]);
