@@ -44,6 +44,9 @@ export default async function accountsHandler(
         const totalItems = Number(responseHeaders.get("x-total-count"));
         return res.status(200).json({ accounts, totalItems, isSuccess: true });
       }
+      default:
+        res.setHeader("Allow", ["GET", "POST"]);
+        res.status(405).end(`Method ${method} Not Allowed`);
     }
   } catch (error) {
     if (error instanceof AxiosError) {
