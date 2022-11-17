@@ -5,6 +5,7 @@ import { getAccountName } from "./getAccountName";
 import { getAccountStatus } from "./getAccountStatus";
 import { getMoney } from "./getMoney";
 import { getDate } from "./getDate";
+import { compareTwoNumber } from "./compareTwoNumber";
 
 export const getAccountData = (
   accounts: AccountModel[]
@@ -32,7 +33,7 @@ export const getAccountData = (
         number: maskAccountNumber(number), // 링크 정보(계좌 id)
         name: getAccountName(name),
         status: getAccountStatus(status),
-        assets: getMoney(assets), // payments보다 큰지, 작은지, 같은지
+        assets: getMoney(assets) + "|" + compareTwoNumber(Number(assets), Number(payments)),
         payments: getMoney(payments),
         is_active: is_active === true ? "활성" : "비활성",
         created_at: getDate(created_at),

@@ -1,6 +1,7 @@
 import { accountTableColumns } from "lib/data/accountTableColumns";
 import { AccountModel } from "model/model";
 import React from "react";
+import AccountItemTable from "./AccountItemTable";
 
 interface Props {
   accountsData?: Record<keyof AccountModel, string>[];
@@ -23,7 +24,7 @@ function AccountListTable({ accountsData }: Props) {
           {accountsData?.map((row, index) => (
             <tr key={index}>
               {accountTableColumns.map(({ key }) => {
-                return <td key={key}>{row[key]}</td>;
+                return <AccountItemTable row={row} column={key} key={key} />
               })}
             </tr>
           ))}
