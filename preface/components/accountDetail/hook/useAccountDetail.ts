@@ -1,4 +1,9 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueries,
+  useQuery,
+  useQueryClient
+} from "@tanstack/react-query";
 import { AccountServiceImpl } from "service/AccountService";
 import { queryKeys } from "react-query/constants";
 import { AccountModel, DashboardModel, UserModel } from "model/model";
@@ -7,68 +12,51 @@ import { UserServiceImpl } from "service/UserService";
 
 import { changeNewAccountDataForDashBoard } from "lib/utils/account/changeNewAccountDataForDashBoard";
 import { useEffect, useState } from "react";
+import { AxiosResponse } from "axios";
 
 export type UpdateAccountBody = AccountModel;
 
 const accountService = new AccountServiceImpl(CLIENT_BASE_URL);
 const userService = new UserServiceImpl(CLIENT_BASE_URL);
 
-export const useGetAccountDetail = (id: number) => {
-  return useQuery(
-    [queryKeys.accounts, id],
-    async () =>
-      await accountService.getUserAccounts<{ accounts: AccountModel[] }>({
-        params: {
-          id
-        }
-      }),
-    {
-      enabled: !!id,
-      select: ({ data: { accounts } }) => accounts
-    }
-  );
-};
-
-export const useGetUser = (id: number) => {
-  return useQuery(
-    ["users", id],
-    async () =>
-      await userService.searchUser<{ users: UserModel[] }>({ params: { id } }),
-    {
-      select: ({ data: { users } }) => users
-    }
-  );
-};
-
 export const useGetAccountAndUser = (id: number) => {
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [detail, setDetial] = useState<DashboardModel>();
   const [userId, setUserId] = useState<number>(0);
-  const {
-    data: accounts,
-    isSuccess: isAccountSuccess,
-    isLoading: isAccountLoading
-  } = useGetAccountDetail(id);
 
-  const {
-    data: user,
-    isSuccess: isUserSuccess,
-    isLoading: isUserLoading
-  } = useGetUser(userId);
+  const results = useQueries({
+    queries: [
+      {
+        queryKey: [queryKeys.accounts, id],
+        queryFn: async () =>
+          await accountService.getUserAccounts<{ accounts: AccountModel[] }>({
+            params: {
+              id
+            }
+          }),
+        enabled: !!id,
+        select: (data: AxiosResponse<{ accounts: AccountModel[] }>) =>
+          data.data.accounts
+      },
+      {
+        queryKey: ["users", userId],
+        queryFn: async () =>
+          await userService.searchUser<{ users: UserModel[] }>({
+            params: { userId }
+          }),
+
+        select: (data: AxiosResponse<{ users: UserModel[] }>) => data.data.users
+      }
+    ]
+  });
+
+  const isSuccess = results.every((query) => query.isSuccess);
+  const isLoading = results.some((query) => query.isLoading);
+  const isAccountSuccess = results[0].isSuccess;
+  const accounts = results[0].data;
+  const user = results[1].data;
 
   useEffect(() => {
-    const isSuccess = [isAccountSuccess, isUserSuccess].every((value) => value);
-    setIsSuccess(isSuccess);
-  }, [isAccountSuccess, isUserSuccess]);
-
-  useEffect(() => {
-    const isLoading = [isAccountLoading, isUserLoading].some((value) => value);
-    setIsLoading(isLoading);
-  }, [isAccountLoading, isUserLoading]);
-
-  useEffect(() => {
-    if (isAccountSuccess) {
+    if (isAccountSuccess && accounts) {
       const [userId] = accounts.map((value) => value.user_id);
       setUserId(userId);
     }

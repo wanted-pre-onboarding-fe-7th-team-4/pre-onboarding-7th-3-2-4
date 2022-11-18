@@ -7,7 +7,10 @@ const nextConfig = {
       true |
       {
         displayName: true
-      }
+      },
+    eslint: {
+      ignoreDuringBuilds: true
+    }
   }
 };
 

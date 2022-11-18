@@ -1,10 +1,11 @@
 import { accountTableColumns } from "lib/data/accountTableColumns";
-import { AccountModel } from "model/model";
+
 import React from "react";
 import AccountItemTable from "./AccountItemTable";
+import { NeedAccountModel } from "../../lib/utils/getFormattedAccountData";
 
 interface Props {
-  accountsData?: Record<keyof AccountModel, string>[];
+  accountsData?: Record<keyof NeedAccountModel, string>[];
 }
 function AccountListTable({ accountsData }: Props) {
   return (

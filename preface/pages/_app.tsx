@@ -8,8 +8,12 @@ import { ThemeProvider } from "styled-components";
 import GlobalStyle from "styles/GlobalStyle";
 import { theme } from "styles/theme";
 import { queryClient } from "react-query/queryClient";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
-export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+export type NextPageWithLayout<P = Record<string, never>, IP = P> = NextPage<
+  P,
+  IP
+> & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
 
@@ -26,6 +30,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
           <GlobalStyle />
           {getLayout(<Component {...pageProps} />)}
         </ThemeProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </>
   );
