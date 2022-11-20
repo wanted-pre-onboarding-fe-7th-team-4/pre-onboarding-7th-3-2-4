@@ -1,3 +1,4 @@
+import { queryKeys } from "react-query/constants";
 import { useRouter } from "next/router";
 import { AxiosError, AxiosResponse } from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -16,7 +17,7 @@ const useCreateNewAccount = () => {
     async (account) => await accountsService.createAccount(account),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(["accounts"]);
+        queryClient.invalidateQueries([queryKeys.accounts]);
         push("/account");
       }
     }

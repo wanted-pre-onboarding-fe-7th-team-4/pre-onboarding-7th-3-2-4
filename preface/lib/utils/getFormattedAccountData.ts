@@ -1,4 +1,4 @@
-import { AccountModel } from "../../model/model";
+import { AccountModel } from "model/model";
 import { changeToBrokerName } from "./changeToBrokerName";
 import { maskAccountNumber } from "./maskAccountNumber";
 import { getAccountName } from "./getAccountName";
@@ -7,13 +7,14 @@ import { getMoney } from "./getMoney";
 import { getDate } from "./getDate";
 import { compareTwoNumber } from "./compareTwoNumber";
 
+export type NeedAccountModel = Omit<AccountModel, "uuid" | "updated_at">;
+
 export const getFormattedAccountData = (
   accounts?: AccountModel[]
-): Record<keyof AccountModel, string>[] | undefined => {
+): Record<keyof NeedAccountModel, string>[] | undefined => {
   const newAccounts = accounts?.map(
     ({
       id,
-      uuid,
       user_id,
       broker_id,
       number,
@@ -22,12 +23,10 @@ export const getFormattedAccountData = (
       assets,
       payments,
       is_active,
-      created_at,
-      updated_at
+      created_at
     }) => {
       return {
         id: id.toString(),
-        uuid,
         user_id: user_id.toString(),
         broker_id: changeToBrokerName(broker_id),
         number: maskAccountNumber(number),
@@ -39,8 +38,7 @@ export const getFormattedAccountData = (
           compareTwoNumber(Number(assets), Number(payments)),
         payments: getMoney(payments),
         is_active: is_active === true ? "활성" : "비활성",
-        created_at: getDate(created_at),
-        updated_at: getDate(updated_at)
+        created_at: getDate(created_at)
       };
     }
   );
